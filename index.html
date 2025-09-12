@@ -7,13 +7,13 @@
 <style>
 :root{
   --bg:#000;
-  --panel:#111;
-  --border:#2d0452;
+  --panel:rgba(17,17,25,0.8);
+  --border:#3b0a7e;
   --accent:#a855f7;
   --accent2:#7c3aed;
   --text:#e5e5e5;
-  --muted:#888;
-  font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  --muted:#999;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
@@ -25,86 +25,106 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  padding:32px;
+  padding:40px;
+  overflow-x:hidden;
+}
+
+/* animated tech grid */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    repeating-linear-gradient(90deg,rgba(168,85,247,0.05) 0 1px,transparent 1px 80px),
+    repeating-linear-gradient(0deg,rgba(168,85,247,0.05) 0 1px,transparent 1px 80px);
+  animation:gridMove 40s linear infinite;
+  z-index:0;
+}
+@keyframes gridMove{
+  from{background-position:0 0,0 0;}
+  to{background-position:80px 80px,80px 80px;}
 }
 
 .container{
+  position:relative;
+  z-index:1;
   width:100%;
-  max-width:900px;
-  display:flex;
-  flex-wrap:wrap;
+  max-width:980px;
+  display:grid;
+  grid-template-columns:260px 1fr;
   gap:32px;
 }
 
-.profile, .panel{
+.card{
   background:var(--panel);
   border:1px solid var(--border);
-  border-radius:16px;
-  padding:24px;
+  border-radius:18px;
+  padding:28px;
+  backdrop-filter:blur(20px);
+  box-shadow:0 0 25px rgba(168,85,247,0.15);
 }
 
+/* profile */
 .profile{
-  flex:0 0 240px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
   text-align:center;
 }
-
 .pfp{
-  width:120px;
-  height:120px;
+  width:130px;
+  height:130px;
   border-radius:20px;
   border:2px solid var(--accent);
   object-fit:cover;
-  margin-bottom:12px;
-  background:#222;
+  background:#111;
+  box-shadow:0 0 15px rgba(168,85,247,0.3);
 }
-
-.user{font-weight:700;font-size:20px}
+.name{margin-top:16px;font-size:22px;font-weight:700;}
 .subtitle{font-size:13px;color:var(--muted);margin-top:4px}
 
-.panel{
-  flex:1;
-}
-
+/* links */
 .links{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
-  gap:16px;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:20px;
 }
-
 .link{
-  display:block;
-  padding:14px 16px;
-  border:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:16px;
+  background:rgba(0,0,0,0.6);
+  border:1px solid rgba(168,85,247,0.25);
   border-radius:12px;
   text-decoration:none;
   color:var(--text);
-  background:#0a0a0a;
-  transition:background .2s,transform .2s;
+  box-shadow:inset 0 0 12px rgba(168,85,247,0.08);
+  transition:transform .25s,box-shadow .25s,border-color .25s;
 }
 .link:hover,.link:focus{
-  background:#1a1a1a;
-  transform:translateY(-3px);
+  transform:translateY(-5px);
+  border-color:var(--accent);
+  box-shadow:0 0 18px rgba(168,85,247,0.35);
 }
-
-.link-title{font-weight:600}
+.link-title{font-weight:600;font-size:15px;}
 .link-desc{font-size:12px;color:var(--muted);margin-top:4px}
 
-@media(max-width:720px){
-  .container{flex-direction:column;align-items:center}
-  .profile{width:100%;max-width:320px}
+@media(max-width:800px){
+  .container{grid-template-columns:1fr;gap:24px}
 }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <section class="profile">
+  <section class="card profile">
     <img id="pfp" class="pfp" alt="Profile picture">
-    <div class="user">Milo</div>
+    <div class="name">Milo</div>
     <div class="subtitle">Link Hub</div>
   </section>
 
-  <section class="panel">
+  <section class="card">
     <div class="links">
       <a class="link" href="https://twitter.com" target="_blank">
         <div class="link-title">Twitter</div>
@@ -112,7 +132,7 @@ body{
       </a>
       <a class="link" href="https://github.com" target="_blank">
         <div class="link-title">GitHub</div>
-        <div class="link-desc">Code</div>
+        <div class="link-desc">Projects</div>
       </a>
       <a class="link" href="https://discord.com" target="_blank">
         <div class="link-title">Discord</div>
@@ -131,17 +151,25 @@ body{
 </div>
 
 <script>
+// Load profile image or fallback gradient
 const pfp = document.getElementById('pfp');
 const img = new Image();
 img.src = 'pfp.png';
-img.onload = ()=>{ pfp.src='pfp.png'; };
-img.onerror = ()=>{
-  pfp.style.background='linear-gradient(135deg,var(--accent),var(--accent2))';
+img.onload = () => pfp.src = 'pfp.png';
+img.onerror = () => {
+  pfp.style.background =
+    'linear-gradient(135deg,var(--accent),var(--accent2))';
 };
-document.body.style.backgroundImage = "url('background.png')";
-document.body.style.backgroundSize = 'cover';
-document.body.style.backgroundPosition = 'center';
-document.body.style.backgroundAttachment = 'fixed';
+
+// Optional background.png overlay
+const bg = new Image();
+bg.src = 'background.png';
+bg.onload = () => {
+  document.body.style.backgroundImage = "url('background.png')";
+  document.body.style.backgroundSize = 'cover';
+  document.body.style.backgroundAttachment = 'fixed';
+  document.body.style.backgroundPosition = 'center';
+};
 </script>
 </body>
 </html>
