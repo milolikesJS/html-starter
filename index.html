@@ -1,622 +1,141 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Milo • High-tech Hub</title>
-<style>
-  /* -------------------------
-     CORE THEME (Black + Purple)
-     ------------------------- */
-  :root{
-    --bg:#000000;
-    --panel: rgba(18,10,23,0.75);
-    --glass-border: rgba(125,60,255,0.12);
-    --accent: #9b5cff;
-    --accent-2: #7c3aed;
-    --muted: #9aa0b2;
-    --text: #e6e9f2;
-    --success: #6ee7b7;
-    --danger: #ff6b6b;
-    --glass-blur: 12px;
-    --radius: 14px;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  }
-
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;
-    min-height:100vh;
-    background:var(--bg);
-    color:var(--text);
-    overflow:hidden;
-  }
-
-  /* particles & background */
-  canvas#particles{position:fixed;inset:0;z-index:0;display:block}
-  .bg-blur{
-    position:fixed;inset:0;z-index:0;filter:blur(20px) saturate(120%);opacity:.10;object-fit:cover;width:100%;height:100%;
-  }
-
-  /* top-level layout */
-  .app{
-    position:relative;z-index:2;height:100vh;display:flex;flex-direction:column;
-  }
-  header{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;gap:12px}
-  .brand{display:flex;align-items:center;gap:12px}
-  .logo {
-    width:52px;height:52px;border-radius:12px;display:grid;place-items:center;
-    background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 6px 24px rgba(124,58,237,0.18);
-    color:#071025;font-weight:700;font-size:18px;
-  }
-  .title{font-size:16px;font-weight:700;letter-spacing:.4px}
-  .top-actions{display:flex;gap:8px;align-items:center}
-
-  /* main area: left sidebar + center + right widgets */
-  .main{
-    display:grid;
-    grid-template-columns:320px 1fr 360px;
-    gap:22px;
-    padding:0 28px 28px;
-    align-items:start;
-  }
-
-  /* ----- LEFT: Profile + Controls ----- */
-  .card{
-    background:var(--panel);border:1px solid var(--glass-border);border-radius:var(--radius);
-    padding:18px;backdrop-filter:blur(var(--glass-blur));
-    box-shadow:0 10px 40px rgba(8,6,12,0.6);
-  }
-
-  .profile{
-    display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;
-  }
-  .avatar-wrap{position:relative;width:140px;height:140px}
-  .avatar{
-    width:100%;height:100%;border-radius:20px;object-fit:cover;border:3px solid rgba(255,255,255,0.04);
-    box-shadow:0 10px 30px rgba(124,58,237,0.12);
-    background:linear-gradient(135deg,var(--accent),var(--accent-2));
-  }
-  /* orbit rings */
-  .ring{position:absolute;inset:0;border-radius:20px;pointer-events:none;mix-blend-mode:screen}
-  .ring svg{width:100%;height:100%}
-  .name{font-weight:700;font-size:18px}
-  .meta{color:var(--muted);font-size:13px}
-
-  .stat-grid{display:flex;gap:10px;margin-top:6px}
-  .stat{flex:1;background:rgba(255,255,255,0.02);padding:8px;border-radius:10px;font-size:13px}
-  .stat .val{font-weight:700}
-
-  .xp{margin-top:12px}
-  .xp-bar{height:10px;background:rgba(255,255,255,0.03);border-radius:999px;overflow:hidden}
-  .xp-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));width:25%;transition:width .6s ease}
-
-  .controls{display:flex;flex-direction:column;gap:8px;margin-top:12px}
-  .btn{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px 10px;border-radius:10px;color:var(--text);font-size:13px;cursor:pointer}
-  .btn.ghost{border-style:dashed}
-  .small{font-size:12px;color:var(--muted)}
-
-  /* ----- CENTER: Typewriter + Links + Projects ----- */
-  .center{
-    display:flex;flex-direction:column;gap:18px;
-  }
-
-  .typewriter{
-    font-family:monospace;background:linear-gradient(90deg,rgba(155,92,255,0.06),transparent);
-    border-radius:10px;padding:12px 16px;border:1px solid rgba(155,92,255,0.06);font-size:14px;
-  }
-
-  /* Links grid */
-  .links-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-  .link-card{
-    display:flex;gap:12px;align-items:center;padding:12px;border-radius:10px;background:rgba(255,255,255,0.02);
-    border:1px solid rgba(255,255,255,0.03);cursor:grab;
-    transition:transform .18s,box-shadow .18s;
-  }
-  .link-card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(0,0,0,0.6)}
-  .link-icon{width:44px;height:44;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center;color:#071025;font-weight:700}
-  .link-meta{flex:1;min-width:0}
-  .link-title{font-weight:700}
-  .link-desc{font-size:13px;color:var(--muted);margin-top:4px}
-  .link-actions{display:flex;gap:8px;align-items:center}
-
-  .search-row{display:flex;gap:10px;align-items:center}
-  .search{flex:1;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);color:var(--text)}
-  .icon-btn{width:44px;height:44;border-radius:10px;background:rgba(255,255,255,0.02);display:grid;place-items:center;border:1px solid rgba(255,255,255,0.03);cursor:pointer}
-
-  /* Projects carousel */
-  .projects{display:flex;gap:12px;overflow:hidden;padding:6px}
-  .project{min-width:220px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
-  .project h4{margin-bottom:6px}
-  .carousel-controls{display:flex;gap:8px;justify-content:flex-end}
-
-  /* ----- RIGHT: Widgets ----- */
-  .widgets{display:flex;flex-direction:column;gap:12px}
-  .widget{padding:12px;border-radius:12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03)}
-  .widget h3{margin:0 0 8px 0;font-size:13px}
-  .now-playing{display:flex;gap:12px;align-items:center}
-  .np-art{width:56px;height:56;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent-2))}
-  .counters{display:flex;gap:8px}
-  .counter{flex:1;padding:10px;border-radius:8px;background:rgba(0,0,0,0.45);text-align:center}
-  .counter .num{font-weight:700;font-size:16px}
-
-  /* Terminal footer */
-  footer.terminal{
-    position:fixed;left:12px;right:12px;bottom:12px;padding:10px 12px;border-radius:10px;background:rgba(2,2,6,0.7);
-    border:1px solid rgba(155,92,255,0.06);font-family:monospace;font-size:12px;z-index:3;max-height:120px;overflow:auto
-  }
-
-  /* Toasts */
-  .toasts{position:fixed;right:18px;bottom:150px;display:flex;flex-direction:column;gap:8px;z-index:5}
-  .toast{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#021018;padding:8px 12px;border-radius:8px;font-size:13px;box-shadow:0 8px 30px rgba(124,58,237,0.12)}
-
-  /* responsive */
-  @media(max-width:1100px){
-    .main{grid-template-columns:1fr; padding: 0 18px 18px}
-    header{padding:14px 18px}
-    footer.terminal{left:8px;right:8px}
-  }
-</style>
+  <meta charset="UTF-8">
+  <title>Milo • Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --bg: #000;
+      --accent: #8b5cf6;
+      --text: #dcdcff;
+    }
+    * {box-sizing:border-box;margin:0;padding:0}
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI',sans-serif;
+      height: 100vh;
+      overflow: hidden;
+    }
+    canvas#particles {
+      position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;
+    }
+    .container {
+      position:relative;z-index:1;
+      height:100%;display:flex;flex-direction:column;
+      justify-content:center;align-items:center;text-align:center;
+      padding:2rem;
+    }
+    .intro {
+      font-size:1.5rem;
+      color:var(--accent);
+      margin-bottom:1rem;
+      min-height:2rem;
+      letter-spacing:.5px;
+    }
+    .pfp-wrap {
+      position:relative;margin-bottom:1.5rem;
+    }
+    .pfp-wrap::before {
+      content:"";
+      position:absolute;
+      top:-8px;left:-8px;right:-8px;bottom:-8px;
+      border-radius:50%;
+      border:2px solid var(--accent);
+      opacity:0.5;
+      animation:spin 10s linear infinite;
+    }
+    @keyframes spin {from{transform:rotate(0)}to{transform:rotate(360deg)}}
+    .pfp {
+      width:140px;height:140px;border-radius:50%;
+      border:3px solid var(--accent);
+      object-fit:cover;
+    }
+    .status {
+      background:rgba(40,40,60,0.6);
+      backdrop-filter:blur(6px);
+      padding:.5rem 1.2rem;
+      border-radius:8px;
+      margin-bottom:1.5rem;
+      font-size:.9rem;
+    }
+    .links {
+      display:flex;flex-wrap:wrap;
+      justify-content:center;gap:1rem;
+      margin-bottom:2rem;
+    }
+    .link {
+      background:rgba(50,50,70,0.6);
+      padding:.7rem 1.2rem;
+      border-radius:10px;
+      text-decoration:none;
+      color:var(--text);
+      display:flex;align-items:center;gap:.5rem;
+      transition:background .25s,transform .25s;
+    }
+    .link:hover {background:rgba(130,100,200,0.3);transform:translateY(-3px)}
+    .link svg {width:20px;height:20px;fill:var(--accent)}
+    .footer {
+      position:absolute;bottom:8px;
+      width:100%;text-align:center;
+      font-size:.75rem;color:#666;
+    }
+  </style>
 </head>
 <body>
-  <!-- Particle canvas + optional background -->
   <canvas id="particles"></canvas>
-  <img id="bgImg" class="bg-blur" alt="" style="display:none">
 
-  <div class="app" role="application" aria-label="Milo high-tech hub">
-    <header>
-      <div class="brand" title="Milo Hub">
-        <div class="logo" aria-hidden="true">MG</div>
-        <div>
-          <div class="title">Milo • High-tech Hub</div>
-          <div class="small" style="color:var(--muted);font-size:12px">Black & Purple • Packed mode</div>
-        </div>
-      </div>
+  <div class="container">
+    <div id="intro" class="intro"></div>
 
-      <div class="top-actions" role="toolbar">
-        <button class="btn" id="copyUrl" title="Copy page URL">Copy URL</button>
-        <button class="btn" id="downloadVcf" title="Download vCard">vCard</button>
-        <button class="btn" id="toggleCompact" title="Toggle compact">Compact</button>
-        <button class="btn" id="themeToggle" title="Toggle theme">Theme</button>
-      </div>
-    </header>
-
-    <div class="main" role="main">
-      <!-- LEFT -->
-      <aside class="card">
-        <div class="profile">
-          <div class="avatar-wrap" aria-hidden="false">
-            <img id="pfp" class="avatar" alt="Profile picture">
-            <div class="ring" aria-hidden="true">
-              <!-- SVG rings -->
-              <svg viewBox="0 0 200 200">
-                <defs><linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#9b5cff"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs>
-                <g fill="none" stroke="url(#g1)" stroke-width="1.5">
-                  <ellipse cx="100" cy="100" rx="70" ry="70" transform="rotate(20 100 100)"/>
-                  <ellipse cx="100" cy="100" rx="88" ry="88" transform="rotate(-12 100 100)"/>
-                </g>
-              </svg>
-            </div>
-          </div>
-
-          <div class="name" id="displayName">Milo</div>
-          <div class="meta">Creator • Orion's Haven</div>
-
-          <div class="stat-grid" style="width:100%">
-            <div class="stat"><div class="small">Status</div><div class="val">Online</div></div>
-            <div class="stat"><div class="small">Ping</div><div class="val" id="pingVal">— ms</div></div>
-          </div>
-
-          <div class="xp">
-            <div class="small">Level • XP</div>
-            <div class="xp-bar" aria-hidden="true"><div class="xp-fill" id="xpFill" style="width:25%"></div></div>
-          </div>
-
-          <div class="controls" aria-hidden="false">
-            <button class="btn" id="addLinkBtn">Add Link</button>
-            <button class="btn ghost" id="manageLinksBtn">Manage</button>
-          </div>
-        </div>
-      </aside>
-
-      <!-- CENTER -->
-      <section class="center">
-        <div class="typewriter" id="typewriter" aria-live="polite"></div>
-
-        <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-            <div style="font-weight:700">Quick Links</div>
-            <div class="search-row" style="width:360px">
-              <input id="searchInput" class="search" placeholder="Search links..." aria-label="Search links">
-              <button class="icon-btn" id="clearSearch" title="Clear">✕</button>
-            </div>
-          </div>
-
-          <div class="links-grid" id="linksGrid" aria-live="polite" aria-atomic="true">
-            <!-- Link cards are injected here via JS -->
-          </div>
-        </div>
-
-        <div class="card" style="display:flex;flex-direction:column;gap:8px">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div style="font-weight:700">Projects</div>
-            <div class="carousel-controls">
-              <button class="btn" id="prevProj">‹</button>
-              <button class="btn" id="nextProj">›</button>
-            </div>
-          </div>
-          <div class="projects" id="projects">
-            <!-- project cards -->
-          </div>
-        </div>
-      </section>
-
-      <!-- RIGHT -->
-      <aside class="widgets">
-        <div class="widget">
-          <h3>Status</h3>
-          <div class="counters">
-            <div class="counter"><div class="num" id="visits">0</div><div class="small">visits</div></div>
-            <div class="counter"><div class="num" id="members">0</div><div class="small">members</div></div>
-          </div>
-        </div>
-
-        <div class="widget">
-          <h3>Now Playing</h3>
-          <div class="now-playing">
-            <div class="np-art" id="npArt"></div>
-            <div style="flex:1">
-              <div id="npTitle" style="font-weight:700">No Track</div>
-              <div id="npArtist" class="small">—</div>
-              <div style="margin-top:8px">
-                <div class="xp-bar" style="height:8px"><div id="npProg" class="xp-fill" style="width:0%"></div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="widget">
-          <h3>Mini Analytics</h3>
-          <div class="small">Today</div>
-          <div style="display:flex;gap:8px;margin-top:8px">
-            <div style="flex:1"><div class="small">Clicks</div><div id="clicks" style="font-weight:700">0</div></div>
-            <div style="flex:1"><div class="small">Impr.</div><div id="impr" style="font-weight:700">0</div></div>
-          </div>
-        </div>
-      </aside>
+    <div class="pfp-wrap">
+      <img src="pfp.png" alt="Profile" class="pfp" onerror="this.style.display='none'">
     </div>
 
-    <footer class="terminal" id="terminal" aria-live="polite"></footer>
+    <div class="status">Status: <strong>Online</strong> • Ping: 42ms</div>
 
-    <div class="toasts" id="toasts" aria-hidden="true"></div>
+    <div class="links">
+      <a href="#" class="link">
+        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        Home
+      </a>
+      <a href="#" class="link">
+        <svg viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-10 4.48-10 10 0 4.42 3.58 8.09 8 8.88v-6.28h-2v-2.6h2V9.77c0-2.02 1.2-3.14 3.04-3.14.88 0 1.8.16 1.8.16v2h-1.02c-1 0-1.32.63-1.32 1.27v1.51h2.25l-.36 2.6h-1.89V21c4.42-.79 8-4.46 8-8.88 0-5.52-4.5-9.98-10-9.98z"/></svg>
+        Social
+      </a>
+      <a href="#" class="link">
+        <svg viewBox="0 0 24 24"><path d="M21 6h-2v9H5v2h14v3l4-4-4-4v3zM3 18h2V9h14V7H5V4L1 8l4 4v-3z"/></svg>
+        Contact
+      </a>
+    </div>
   </div>
 
-  <!-- Add Link Modal (hidden) -->
-  <dialog id="addLinkModal" style="border:none;background:transparent">
-    <form method="dialog" style="background:var(--panel);padding:12px;border-radius:10px;border:1px solid var(--glass-border);width:320px">
-      <div style="font-weight:700;margin-bottom:8px">Add Link</div>
-      <input id="linkTitle" placeholder="Title" style="width:100%;padding:8px;margin-bottom:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--text)">
-      <input id="linkUrl" placeholder="https://..." style="width:100%;padding:8px;margin-bottom:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--text)">
-      <input id="linkDesc" placeholder="Short description" style="width:100%;padding:8px;margin-bottom:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--text)">
-      <div style="display:flex;justify-content:flex-end;gap:8px">
-        <button class="btn" id="addCancel">Cancel</button>
-        <button class="btn" id="addSave">Save</button>
-      </div>
-    </form>
-  </dialog>
+  <div class="footer">> Boot complete — Hub ready</div>
 
-<script>
-/* ============================
-   Utilities & Starter Content
-   ============================ */
-const DEFAULT_LINKS = [
-  {id:1,title:'Twitter',url:'https://twitter.com',desc:'Micro-updates',icon:'T'},
-  {id:2,title:'GitHub',url:'https://github.com',desc:'Code & repos',icon:'GH'},
-  {id:3,title:'Discord',url:'https://discord.com',desc:'Community chat',icon:'D'},
-  {id:4,title:'YouTube',url:'https://youtube.com',desc:'Videos',icon:'YT'},
-  {id:5,title:'Email',url:'mailto:hello@example.com',desc:'hello@example.com',icon:'@'}
-];
-const DEFAULT_PROJECTS = [
-  {title:'Pentagon Server',desc:'500x Base project',link:'#'},
-  {title:'Case Spinner',desc:'CS:GO style case spinner',link:'#'},
-  {title:'Brimify',desc:'Custom music player',link:'#'}
-];
+  <script>
+    // Typewriter
+    const text="Welcome to Milo's Hub";
+    let idx=0;const intro=document.getElementById('intro');
+    (function type(){ if(idx<text.length){intro.textContent+=text.charAt(idx);idx++;setTimeout(type,60);} })();
 
-/* Local storage helpers */
-function loadLinks(){ try{ return JSON.parse(localStorage.getItem('milo_links')) || DEFAULT_LINKS }catch(e){return DEFAULT_LINKS}}
-function saveLinks(a){ localStorage.setItem('milo_links', JSON.stringify(a)) }
-
-/* Simple toast */
-function toast(msg,ttl=2500){
-  const t=document.createElement('div'); t.className='toast'; t.textContent=msg;
-  document.getElementById('toasts').appendChild(t);
-  setTimeout(()=>t.remove(),ttl);
-}
-
-/* Random integer */
-const rnd=(min,max)=>Math.floor(Math.random()*(max-min+1))+min;
-
-/* ==================================
-   Particle background (canvas lightweight)
-   ================================== */
-const canvas = document.getElementById('particles');
-const ctx=canvas.getContext('2d');
-let W, H;
-function resize(){ W=canvas.width=innerWidth; H=canvas.height=innerHeight }
-addEventListener('resize', resize); resize();
-
-const particles=[];
-for(let i=0;i<90;i++){
-  particles.push({
-    x:Math.random()*W, y:Math.random()*H,
-    vx:(Math.random()-0.5)*0.6, vy:(Math.random()-0.5)*0.6,
-    r:Math.random()*2.4+0.8, hue: rnd(260,290), a: Math.random()*0.6+0.2
-  });
-}
-
-function drawParticles(){
-  ctx.clearRect(0,0,W,H);
-  for(const p of particles){
-    p.x += p.vx; p.y += p.vy;
-    if(p.x<0||p.x>W) p.vx *= -1;
-    if(p.y<0||p.y>H) p.vy *= -1;
-    ctx.beginPath();
-    const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*6);
-    g.addColorStop(0, `rgba(155,92,255,${p.a})`);
-    g.addColorStop(0.4, `rgba(124,58,237,${p.a*0.6})`);
-    g.addColorStop(1, `rgba(10,8,15,0)`);
-    ctx.fillStyle=g; ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
-  }
-  requestAnimationFrame(drawParticles);
-}
-drawParticles();
-
-/* Optional blurred background image if exists */
-const bgImg = document.getElementById('bgImg');
-(function tryBg(){
-  const img = new Image(); img.src='background.png?v='+Date.now();
-  img.onload = ()=>{ bgImg.src = img.src; bgImg.style.display='block'; bgImg.style.opacity='0.18' };
-  img.onerror = ()=>{};  
-})();
-
-/* ==========================
-   Profile image & rings
-   ========================== */
-const pfp = document.getElementById('pfp');
-(function tryPfp(){
-  const img = new Image(); img.src='pfp.png?v='+Date.now();
-  img.onload = ()=>{ pfp.src=img.src; }
-  img.onerror = ()=>{ /* fallback gradient already in CSS */ }
-})();
-
-/* ==========================
-   Typewriter + Boot Terminal
-   ========================== */
-const typeEl = document.getElementById('typewriter');
-const term = document.getElementById('terminal');
-const bootLines = [
-  '> Boot sequence initiated',
-  '> Loading assets',
-  '> Particle engine online',
-  '> Profile loaded',
-  '> Services: links, analytics, now-playing',
-  '> All systems nominal'
-];
-let bootIdx=0;
-function bootStep(){
-  if(bootIdx<bootLines.length){
-    typeWriter(bootLines[bootIdx]+"\n", typeEl, 6, ()=>{ bootIdx++; setTimeout(bootStep, 180) });
-    appendTerm(bootLines[bootIdx]);    
-  } else {
-    typeWriter("> Welcome to Milo's hub\n", typeEl, 6);
-  }
-}
-function typeWriter(text, el, speed=40, cb){
-  let i=0;
-  const id=setInterval(()=>{ el.textContent += text.charAt(i); i++; if(i>=text.length){ clearInterval(id); if(cb)cb(); } }, speed);
-}
-function appendTerm(line){
-  const div = document.createElement('div'); div.textContent = line;
-  term.appendChild(div); term.scrollTop = term.scrollHeight;
-}
-bootStep();
-
-/* make terminal show live logs */
-setInterval(()=>{ appendTerm(`> heartbeat ${new Date().toLocaleTimeString()}`); if(term.children.length>40) term.removeChild(term.firstChild) }, 7000);
-
-/* ==========================
-   Links grid management
-   ========================== */
-let links = loadLinks();
-const linksGrid = document.getElementById('linksGrid');
-
-function renderLinks(filter=''){
-  linksGrid.innerHTML='';
-  const f = filter.trim().toLowerCase();
-  const arr = links.filter(l => !f || l.title.toLowerCase().includes(f) || l.desc.toLowerCase().includes(f));
-  for(const item of arr){
-    const a = document.createElement('a'); a.className='link-card'; a.href=item.url; a.target='_blank'; a.draggable=true;
-    a.dataset.id = item.id;
-    a.innerHTML = `
-      <div class="link-icon" aria-hidden="true">${escapeHtml(item.icon||item.title.charAt(0))}</div>
-      <div class="link-meta">
-        <div class="link-title">${escapeHtml(item.title)}</div>
-        <div class="link-desc">${escapeHtml(item.desc||'')}</div>
-      </div>
-      <div class="link-actions">
-        <button title="Copy URL" class="btn copy" data-url="${escapeHtml(item.url)}">Copy</button>
-      </div>
-    `;
-    // events
-    a.querySelector('.copy').addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); navigator.clipboard.writeText(item.url); toast('Copied link'); increment('clicks'); });
-    a.addEventListener('click', ()=>{ increment('clicks') });
-    // drag reorder
-    a.addEventListener('dragstart', (e)=>{ e.dataTransfer.setData('text/plain', item.id) });
-    linksGrid.appendChild(a);
-  }
-}
-renderLinks();
-
-/* Drag-drop reorder */
-linksGrid.addEventListener('dragover', e=>e.preventDefault());
-linksGrid.addEventListener('drop', e=>{
-  e.preventDefault();
-  const id = e.dataTransfer.getData('text/plain');
-  const el = e.target.closest('.link-card');
-  if(!id) return;
-  const fromIdx = links.findIndex(x=>x.id==id);
-  if(fromIdx===-1) return;
-  const afterId = el?.dataset?.id;
-  const toIdx = afterId ? links.findIndex(x=>x.id==afterId) : links.length-1;
-  const [m] = links.splice(fromIdx,1);
-  links.splice(toIdx, 0, m);
-  saveLinks(links); renderLinks(document.getElementById('searchInput').value);
-  toast('Links reordered');
-});
-
-/* Search */
-document.getElementById('searchInput').addEventListener('input', (e)=> renderLinks(e.target.value));
-document.getElementById('clearSearch').addEventListener('click', ()=>{ document.getElementById('searchInput').value=''; renderLinks(); });
-
-/* Add link modal */
-const addModal = document.getElementById('addLinkModal');
-document.getElementById('addLinkBtn').addEventListener('click', ()=> addModal.showModal());
-document.getElementById('addCancel').addEventListener('click', ()=> addModal.close());
-document.getElementById('addSave').addEventListener('click', ()=>{
-  const t = document.getElementById('linkTitle').value.trim();
-  const u = document.getElementById('linkUrl').value.trim();
-  const d = document.getElementById('linkDesc').value.trim();
-  if(!t || !u){ toast('Title & URL required'); return; }
-  const id = Date.now();
-  links.unshift({id,title:t,url:u,desc:d,icon:t.charAt(0).toUpperCase()});
-  saveLinks(links); renderLinks(); addModal.close(); toast('Link added');
-});
-
-/* copy page url, vcard, theme toggle */
-document.getElementById('copyUrl').addEventListener('click', ()=>{
-  navigator.clipboard.writeText(location.href); toast('Page URL copied');
-});
-document.getElementById('downloadVcf').addEventListener('click', ()=>{
-  const vcf = `BEGIN:VCARD
-VERSION:3.0
-FN:Milo
-ORG:Orion's Haven
-EMAIL;TYPE=INTERNET:hello@example.com
-END:VCARD`;
-  const blob = new Blob([vcf], {type:'text/vcard'}); const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href=url; a.download='Milo.vcf'; a.click(); URL.revokeObjectURL(url); toast('vCard downloaded');
-});
-document.getElementById('themeToggle').addEventListener('click', ()=>{
-  const r=document.documentElement;
-  if(getComputedStyle(r).getPropertyValue('--accent').trim()==='#9b5cff'){
-    r.style.setProperty('--accent','#2dd4bf'); r.style.setProperty('--accent-2','#60a5fa'); toast('Theme: Cyan');
-  } else {
-    r.style.setProperty('--accent','#9b5cff'); r.style.setProperty('--accent-2','#7c3aed'); toast('Theme: Purple');
-  }
-});
-
-/* Compact toggle */
-document.getElementById('toggleCompact').addEventListener('click', ()=>{
-  document.body.classList.toggle('compact');
-  toast('Toggled compact mode');
-});
-
-/* simple analytics mock */
-function increment(key){ const el=document.getElementById(key); if(!el) return; el.textContent = Number(el.textContent||0)+1; localStorage.setItem('milo_stat_'+key, el.textContent) }
-['visits','members','clicks','impr'].forEach(k=>{
-  const v = localStorage.getItem('milo_stat_'+k) || rnd(10,300);
-  document.getElementById(k).textContent = v;
-});
-increment('visits'); // one visit
-
-/* Projects carousel */
-const projectsWrap = document.getElementById('projects');
-let projectIndex=0;
-function renderProjects(){
-  projectsWrap.innerHTML='';
-  DEFAULT_PROJECTS.forEach((p,i)=>{
-    const div = document.createElement('div'); div.className='project';
-    div.innerHTML = `<h4>${escapeHtml(p.title)}</h4><div class="small">${escapeHtml(p.desc)}</div>`;
-    projectsWrap.appendChild(div);
-  });
-  projectsWrap.scrollLeft = projectIndex * 232;
-}
-renderProjects();
-document.getElementById('prevProj').addEventListener('click', ()=>{ projectIndex = Math.max(0, projectIndex-1); projectsWrap.scrollLeft = projectIndex*232; });
-document.getElementById('nextProj').addEventListener('click', ()=>{ projectIndex = Math.min(DEFAULT_PROJECTS.length-1, projectIndex+1); projectsWrap.scrollLeft = projectIndex*232; });
-
-/* Now playing mock */
-let npPos=0;
-const tracks = [
-  {title:'Solar Drift', artist:'Brim', length:180},
-  {title:'Nightcode', artist:'Milo', length:240},
-  {title:'Orbit', artist:'Orion', length:215}
-];
-function tickNP(){
-  const t = tracks[npPos % tracks.length];
-  document.getElementById('npTitle').textContent = t.title;
-  document.getElementById('npArtist').textContent = t.artist;
-  let prog=0; const step=5;
-  const id=setInterval(()=>{
-    prog+=step;
-    const pct = Math.min(100, (prog/t.length)*100);
-    document.getElementById('npProg').style.width = pct+'%';
-    if(pct>=100){ clearInterval(id); npPos++; setTimeout(tickNP,400); }
-  }, 1000);
-}
-tickNP();
-
-/* Ping simulation */
-function ping(){
-  const ms = rnd(18,120);
-  document.getElementById('pingVal').textContent = ms + ' ms';
-}
-setInterval(ping,4000); ping();
-
-/* Keyboard shortcuts */
-document.addEventListener('keydown', (e)=>{
-  if(e.ctrlKey && e.key==='k'){ e.preventDefault(); document.getElementById('searchInput').focus(); }
-  if(e.key==='?'){ toast('Shortcuts: Ctrl+K search, A add link'); }
-  if(e.key.toLowerCase()==='a'){ document.getElementById('addLinkBtn').click(); }
-});
-
-/* Link preview on hover (basic) */
-linksGrid.addEventListener('mouseover', async (e)=>{
-  const el = e.target.closest('.link-card'); if(!el) return;
-  // show mock preview via toast
-  const title = el.querySelector('.link-title')?.textContent || '';
-  toast('Preview: ' + title, 900);
-});
-
-/* Accessibility: focus styles */
-document.addEventListener('keydown', ()=> document.body.classList.add('kbdmode'), {once:true});
-
-/* Helper escape */
-function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])) }
-
-/* Small helper: animate xp fill */
-setInterval(()=> {
-  const el=document.getElementById('xpFill');
-  const val = parseFloat(el.style.width) || 25;
-  const next = (val+ (Math.random()*12+3)) % 100;
-  el.style.width = next + '%';
-}, 5000);
-
-/* populate links & attach copy listeners after initial render */
-renderLinks();
-document.addEventListener('click', (e)=>{
-  if(e.target.matches('.link-card')){} // handled by default
-});
-
-/* Warn user on unload */
-addEventListener('beforeunload', (e)=>{ localStorage.setItem('milo_links', JSON.stringify(links)); });
-
-/* Helper to read local storage and restore links order on load */
-window.addEventListener('load', ()=>{ renderLinks() });
-
-/* Small UX: toast welcome */
-toast('Welcome — loaded many features', 2400);
-</script>
+    // Particles
+    const c=document.getElementById('particles'),ctx=c.getContext('2d');
+    let parts=[];const count=70;
+    function resize(){c.width=innerWidth;c.height=innerHeight;}
+    addEventListener('resize',resize);resize();
+    for(let i=0;i<count;i++){parts.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.6,vy:(Math.random()-.5)*.6,r:Math.random()*2+1});}
+    (function draw(){
+      ctx.clearRect(0,0,c.width,c.height);
+      ctx.fillStyle='rgba(139,92,246,0.8)';
+      parts.forEach(p=>{
+        ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();
+        p.x+=p.vx;p.y+=p.vy;
+        if(p.x<0||p.x>c.width)p.vx*=-1;
+        if(p.y<0||p.y>c.height)p.vy*=-1;
+      });
+      requestAnimationFrame(draw);
+    })();
+  </script>
 </body>
 </html>
