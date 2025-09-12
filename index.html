@@ -2,140 +2,95 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Milo • Hub</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Milo's Links</title>
   <style>
-    :root {
-      --bg: #000;
-      --accent: #8b5cf6;
-      --text: #dcdcff;
-    }
-    * {box-sizing:border-box;margin:0;padding:0}
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Segoe UI',sans-serif;
-      height: 100vh;
-      overflow: hidden;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #000;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 40px 20px;
     }
-    canvas#particles {
-      position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;
+
+    .profile {
+      text-align: center;
+      margin-bottom: 30px;
     }
-    .container {
-      position:relative;z-index:1;
-      height:100%;display:flex;flex-direction:column;
-      justify-content:center;align-items:center;text-align:center;
-      padding:2rem;
+
+    .profile img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid #8000ff;
     }
-    .intro {
-      font-size:1.5rem;
-      color:var(--accent);
-      margin-bottom:1rem;
-      min-height:2rem;
-      letter-spacing:.5px;
+
+    h1 {
+      margin: 15px 0 5px;
+      font-size: 2rem;
+      color: #b266ff;
     }
-    .pfp-wrap {
-      position:relative;margin-bottom:1.5rem;
+
+    p {
+      color: #aaa;
+      margin-bottom: 40px;
     }
-    .pfp-wrap::before {
-      content:"";
-      position:absolute;
-      top:-8px;left:-8px;right:-8px;bottom:-8px;
-      border-radius:50%;
-      border:2px solid var(--accent);
-      opacity:0.5;
-      animation:spin 10s linear infinite;
-    }
-    @keyframes spin {from{transform:rotate(0)}to{transform:rotate(360deg)}}
-    .pfp {
-      width:140px;height:140px;border-radius:50%;
-      border:3px solid var(--accent);
-      object-fit:cover;
-    }
-    .status {
-      background:rgba(40,40,60,0.6);
-      backdrop-filter:blur(6px);
-      padding:.5rem 1.2rem;
-      border-radius:8px;
-      margin-bottom:1.5rem;
-      font-size:.9rem;
-    }
+
     .links {
-      display:flex;flex-wrap:wrap;
-      justify-content:center;gap:1rem;
-      margin-bottom:2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 100%;
+      max-width: 400px;
     }
+
     .link {
-      background:rgba(50,50,70,0.6);
-      padding:.7rem 1.2rem;
-      border-radius:10px;
-      text-decoration:none;
-      color:var(--text);
-      display:flex;align-items:center;gap:.5rem;
-      transition:background .25s,transform .25s;
+      display: block;
+      text-align: center;
+      padding: 14px 20px;
+      background: #1a1a1a;
+      border: 2px solid #8000ff;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 1.1rem;
+      color: #fff;
+      transition: all 0.2s;
     }
-    .link:hover {background:rgba(130,100,200,0.3);transform:translateY(-3px)}
-    .link svg {width:20px;height:20px;fill:var(--accent)}
-    .footer {
-      position:absolute;bottom:8px;
-      width:100%;text-align:center;
-      font-size:.75rem;color:#666;
+
+    .link:hover {
+      background: #8000ff;
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    footer {
+      margin-top: auto;
+      font-size: 0.85rem;
+      color: #666;
     }
   </style>
 </head>
 <body>
-  <canvas id="particles"></canvas>
-
-  <div class="container">
-    <div id="intro" class="intro"></div>
-
-    <div class="pfp-wrap">
-      <img src="pfp.png" alt="Profile" class="pfp" onerror="this.style.display='none'">
-    </div>
-
-    <div class="status">Status: <strong>Online</strong> • Ping: 42ms</div>
-
-    <div class="links">
-      <a href="#" class="link">
-        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-        Home
-      </a>
-      <a href="#" class="link">
-        <svg viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-10 4.48-10 10 0 4.42 3.58 8.09 8 8.88v-6.28h-2v-2.6h2V9.77c0-2.02 1.2-3.14 3.04-3.14.88 0 1.8.16 1.8.16v2h-1.02c-1 0-1.32.63-1.32 1.27v1.51h2.25l-.36 2.6h-1.89V21c4.42-.79 8-4.46 8-8.88 0-5.52-4.5-9.98-10-9.98z"/></svg>
-        Social
-      </a>
-      <a href="#" class="link">
-        <svg viewBox="0 0 24 24"><path d="M21 6h-2v9H5v2h14v3l4-4-4-4v3zM3 18h2V9h14V7H5V4L1 8l4 4v-3z"/></svg>
-        Contact
-      </a>
-    </div>
+  <div class="profile">
+    <img src="pfp.png" alt="Profile Picture">
+    <h1>Milo Grace</h1>
+    <p>Find me around the web</p>
   </div>
 
-  <div class="footer">> Boot complete — Hub ready</div>
+  <div class="links">
+    <a class="link" href="https://discord.gg/yourlink" target="_blank">Discord</a>
+    <a class="link" href="https://github.com/yourname" target="_blank">GitHub</a>
+    <a class="link" href="https://twitter.com/yourname" target="_blank">Twitter</a>
+    <a class="link" href="mailto:you@example.com" target="_blank">Email Me</a>
+  </div>
 
-  <script>
-    // Typewriter
-    const text="Welcome to Milo's Hub";
-    let idx=0;const intro=document.getElementById('intro');
-    (function type(){ if(idx<text.length){intro.textContent+=text.charAt(idx);idx++;setTimeout(type,60);} })();
-
-    // Particles
-    const c=document.getElementById('particles'),ctx=c.getContext('2d');
-    let parts=[];const count=70;
-    function resize(){c.width=innerWidth;c.height=innerHeight;}
-    addEventListener('resize',resize);resize();
-    for(let i=0;i<count;i++){parts.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.6,vy:(Math.random()-.5)*.6,r:Math.random()*2+1});}
-    (function draw(){
-      ctx.clearRect(0,0,c.width,c.height);
-      ctx.fillStyle='rgba(139,92,246,0.8)';
-      parts.forEach(p=>{
-        ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();
-        p.x+=p.vx;p.y+=p.vy;
-        if(p.x<0||p.x>c.width)p.vx*=-1;
-        if(p.y<0||p.y>c.height)p.vy*=-1;
-      });
-      requestAnimationFrame(draw);
-    })();
-  </script>
+  <footer>
+    © 2025 Milo Grace
+  </footer>
 </body>
 </html>
