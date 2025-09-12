@@ -1,175 +1,159 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Milo Links</title>
-<style>
-:root{
-  --bg:#000;
-  --panel:rgba(17,17,25,0.8);
-  --border:#3b0a7e;
-  --accent:#a855f7;
-  --accent2:#7c3aed;
-  --text:#e5e5e5;
-  --muted:#999;
-  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-
-*{box-sizing:border-box;margin:0;padding:0}
-
-body{
-  background:var(--bg);
-  color:var(--text);
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:40px;
-  overflow-x:hidden;
-}
-
-/* animated tech grid */
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background:
-    repeating-linear-gradient(90deg,rgba(168,85,247,0.05) 0 1px,transparent 1px 80px),
-    repeating-linear-gradient(0deg,rgba(168,85,247,0.05) 0 1px,transparent 1px 80px);
-  animation:gridMove 40s linear infinite;
-  z-index:0;
-}
-@keyframes gridMove{
-  from{background-position:0 0,0 0;}
-  to{background-position:80px 80px,80px 80px;}
-}
-
-.container{
-  position:relative;
-  z-index:1;
-  width:100%;
-  max-width:980px;
-  display:grid;
-  grid-template-columns:260px 1fr;
-  gap:32px;
-}
-
-.card{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:28px;
-  backdrop-filter:blur(20px);
-  box-shadow:0 0 25px rgba(168,85,247,0.15);
-}
-
-/* profile */
-.profile{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  text-align:center;
-}
-.pfp{
-  width:130px;
-  height:130px;
-  border-radius:20px;
-  border:2px solid var(--accent);
-  object-fit:cover;
-  background:#111;
-  box-shadow:0 0 15px rgba(168,85,247,0.3);
-}
-.name{margin-top:16px;font-size:22px;font-weight:700;}
-.subtitle{font-size:13px;color:var(--muted);margin-top:4px}
-
-/* links */
-.links{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:20px;
-}
-.link{
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  padding:16px;
-  background:rgba(0,0,0,0.6);
-  border:1px solid rgba(168,85,247,0.25);
-  border-radius:12px;
-  text-decoration:none;
-  color:var(--text);
-  box-shadow:inset 0 0 12px rgba(168,85,247,0.08);
-  transition:transform .25s,box-shadow .25s,border-color .25s;
-}
-.link:hover,.link:focus{
-  transform:translateY(-5px);
-  border-color:var(--accent);
-  box-shadow:0 0 18px rgba(168,85,247,0.35);
-}
-.link-title{font-weight:600;font-size:15px;}
-.link-desc{font-size:12px;color:var(--muted);margin-top:4px}
-
-@media(max-width:800px){
-  .container{grid-template-columns:1fr;gap:24px}
-}
-</style>
+  <meta charset="UTF-8">
+  <title>Milo • Links</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --bg: #000;
+      --accent: #8b5cf6;
+      --text: #e0e0ff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      overflow: hidden;
+    }
+    canvas#particles {
+      position: fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      z-index:0;
+    }
+    .container {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 2rem;
+      text-align: center;
+    }
+    .intro {
+      font-size: 1.4rem;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      min-height: 2rem;
+    }
+    .pfp {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      border: 3px solid var(--accent);
+      object-fit: cover;
+      margin-bottom: 1.2rem;
+    }
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .link {
+      background: rgba(40,40,60,0.6);
+      backdrop-filter: blur(6px);
+      padding: 0.8rem 1.3rem;
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: background 0.25s, transform 0.25s;
+    }
+    .link:hover {
+      background: rgba(120,80,200,0.3);
+      transform: translateY(-3px);
+    }
+    .link svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--accent);
+      flex-shrink: 0;
+    }
+  </style>
 </head>
 <body>
+  <canvas id="particles"></canvas>
 
-<div class="container">
-  <section class="card profile">
-    <img id="pfp" class="pfp" alt="Profile picture">
-    <div class="name">Milo</div>
-    <div class="subtitle">Link Hub</div>
-  </section>
+  <div class="container">
+    <div id="intro" class="intro"></div>
+    <img src="pfp.png" alt="Profile picture" class="pfp" onerror="this.style.display='none'">
 
-  <section class="card">
     <div class="links">
-      <a class="link" href="https://twitter.com" target="_blank">
-        <div class="link-title">Twitter</div>
-        <div class="link-desc">Updates</div>
+      <a href="#" class="link">
+        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        Home
       </a>
-      <a class="link" href="https://github.com" target="_blank">
-        <div class="link-title">GitHub</div>
-        <div class="link-desc">Projects</div>
+      <a href="#" class="link">
+        <svg viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-10 4.48-10 10 0 4.42 3.58 8.09 8 8.88v-6.28h-2v-2.6h2V9.77c0-2.02 1.2-3.14 3.04-3.14.88 0 1.8.16 1.8.16v2h-1.02c-1 0-1.32.63-1.32 1.27v1.51h2.25l-.36 2.6h-1.89V21c4.42-.79 8-4.46 8-8.88 0-5.52-4.5-9.98-10-9.98z"/></svg>
+        Social
       </a>
-      <a class="link" href="https://discord.com" target="_blank">
-        <div class="link-title">Discord</div>
-        <div class="link-desc">Community</div>
-      </a>
-      <a class="link" href="https://youtube.com" target="_blank">
-        <div class="link-title">YouTube</div>
-        <div class="link-desc">Videos</div>
-      </a>
-      <a class="link" href="mailto:hello@example.com">
-        <div class="link-title">Email</div>
-        <div class="link-desc">hello@example.com</div>
+      <a href="#" class="link">
+        <svg viewBox="0 0 24 24"><path d="M21 6h-2v9H5v2h14v3l4-4-4-4v3zM3 18h2V9h14V7H5V4L1 8l4 4v-3z"/></svg>
+        Contact
       </a>
     </div>
-  </section>
-</div>
+  </div>
 
-<script>
-// Load profile image or fallback gradient
-const pfp = document.getElementById('pfp');
-const img = new Image();
-img.src = 'pfp.png';
-img.onload = () => pfp.src = 'pfp.png';
-img.onerror = () => {
-  pfp.style.background =
-    'linear-gradient(135deg,var(--accent),var(--accent2))';
-};
+  <script>
+    // Typewriter effect
+    const text = "Welcome to Milo's high-tech hub";
+    let idx = 0;
+    const intro = document.getElementById('intro');
+    function type() {
+      if (idx < text.length) {
+        intro.textContent += text.charAt(idx);
+        idx++;
+        setTimeout(type, 60);
+      }
+    }
+    type();
 
-// Optional background.png overlay
-const bg = new Image();
-bg.src = 'background.png';
-bg.onload = () => {
-  document.body.style.backgroundImage = "url('background.png')";
-  document.body.style.backgroundSize = 'cover';
-  document.body.style.backgroundAttachment = 'fixed';
-  document.body.style.backgroundPosition = 'center';
-};
-</script>
+    // Particle background
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const count = 60;
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    for(let i=0; i<count; i++){
+      particles.push({
+        x: Math.random()*canvas.width,
+        y: Math.random()*canvas.height,
+        vx: (Math.random()-0.5)*0.6,
+        vy: (Math.random()-0.5)*0.6,
+        r: Math.random()*2+1
+      });
+    }
+
+    function draw(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle = 'rgba(139,92,246,0.8)';
+      for(let p of particles){
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fill();
+        p.x+=p.vx;
+        p.y+=p.vy;
+        if(p.x<0||p.x>canvas.width) p.vx*=-1;
+        if(p.y<0||p.y>canvas.height) p.vy*=-1;
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
 </body>
 </html>
