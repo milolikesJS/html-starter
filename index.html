@@ -50,7 +50,6 @@
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    border: 2px solid #fff;
   }
   h1 {
     margin: 10px 0 5px;
@@ -66,36 +65,39 @@
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 15px;
     margin-bottom: 30px;
   }
   .badges img {
     width: 50px;
     height: 50px;
     border-radius: 8px;
-    border: 1px solid #fff;
+    filter: drop-shadow(0 0 10px white);
+    transition: transform 0.2s;
+  }
+  .badges img:hover {
+    transform: scale(1.1);
   }
 
   /* Links */
   .links {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
     width: 100%;
-    max-width: 400px;
+    max-width: 300px;
     z-index: 1;
   }
   .link {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     justify-content: center;
-    padding: 14px 20px;
+    padding: 8px 15px;
     background: #111;
-    border: 1px solid #fff;
-    border-radius: 12px;
+    border-radius: 10px;
     text-decoration: none;
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #fff;
     transition: all 0.2s;
   }
@@ -104,16 +106,8 @@
     color: #000;
   }
   .link img {
-    width: 24px;
-    height: 24px;
-  }
-
-  footer {
-    margin-top: auto;
-    font-size: 0.85rem;
-    color: #666;
-    z-index: 1;
-    padding-bottom: 20px;
+    width: 20px;
+    height: 20px;
   }
 </style>
 </head>
@@ -127,7 +121,7 @@
   <p class="bio">Coder, Electrical Engineer, Cyber Security, Bot Developer</p>
   
   <div class="badges">
-    <!-- Put any PNG named Badge1.png, Badge2.png etc. -->
+    <!-- Add PNG badges like Badge1.png, Badge2.png -->
     <img src="Badge1.png" alt="Badge">
     <img src="Badge2.png" alt="Badge">
   </div>
@@ -150,8 +144,6 @@
     <img src="tiktok.png" alt="TikTok"> TikTok
   </a>
 </div>
-
-<footer>© 2025 Milo Grace</footer>
 
 <script>
   // Rain drops
