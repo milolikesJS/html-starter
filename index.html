@@ -1,79 +1,395 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Milo Grace – Links</title>
-  <style>
-    :root {
-      --bg: #121212;
-      --card: #1e1e1e;
-      --text: #ffffff;
-      --accent: #7c4dff;
-    }
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    .container {
-      max-width: 420px;
-      width: 100%;
-      padding: 2rem;
-      text-align: center;
-    }
-    h1 {
-      margin-bottom: 0.25em;
-      font-size: 2rem;
-    }
-    p.tagline {
-      color: #ccc;
-      margin-bottom: 2rem;
-    }
-    .links {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .links a {
-      display: block;
-      padding: 0.9rem 1rem;
-      background: var(--card);
-      border-radius: 10px;
-      text-decoration: none;
-      color: var(--text);
-      font-size: 1rem;
-      transition: background 0.2s, transform 0.1s;
-    }
-    .links a:hover {
-      background: var(--accent);
-      transform: scale(1.03);
-    }
-    footer {
-      margin-top: 2rem;
-      font-size: 0.8rem;
-      color: #666;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Milo Grace</h1>
-    <p class="tagline">Links & Projects</p>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Milo — Links</title>
+<meta name="description" content="High-tech dark link page — portable single file. Searches for pfp.png and background.png." />
 
-    <div class="links">
-      <a href="https://github.com/" target="_blank">GitHub</a>
-      <a href="https://twitter.com/" target="_blank">Twitter</a>
-      <a href="https://discord.gg/" target="_blank">Discord</a>
-      <a href="mailto:your@email.com">Email Me</a>
+<style>
+  :root{
+    --bg-1:#07070a;
+    --bg-2:#0f1115;
+    --glass: rgba(255,255,255,0.04);
+    --muted: rgba(255,255,255,0.55);
+    --accent: #6EE7B7; /* neon-ish */
+    --accent-2: #7dd3fc;
+    --card-radius: 18px;
+    --blur: 14px;
+    --glass-border: rgba(255,255,255,0.06);
+    --glass-outline: rgba(110,231,183,0.08);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+
+  /* Reset + base */
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    color: #e6eef3;
+    background:
+      radial-gradient(1200px 600px at 10% 10%, rgba(125,211,252,0.04), transparent 6%),
+      linear-gradient(180deg,var(--bg-1),var(--bg-2));
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px;
+    transition:background .45s ease;
+  }
+
+  /* Animated holographic grid + scanline */
+  .scene::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background-image: linear-gradient(transparent 96%, rgba(255,255,255,0.02) 100%);
+    pointer-events:none;
+    mix-blend-mode:overlay;
+    z-index:0;
+    animation: scan 8s linear infinite;
+  }
+  @keyframes scan {
+    0%{opacity:.3}
+    50%{opacity:.07}
+    100%{opacity:.3}
+  }
+
+  .container{
+    position:relative;
+    width:100%;
+    max-width:980px;
+    z-index:2;
+    display:grid;
+    grid-template-columns: 220px 1fr;
+    gap:28px;
+    align-items:start;
+  }
+
+  /* Left column / profile */
+  .profile{
+    background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+    border-radius:var(--card-radius);
+    padding:20px;
+    backdrop-filter: blur(var(--blur));
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 8px 30px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    min-height:260px;
+  }
+
+  .pfp-wrap{
+    width:112px;
+    height:112px;
+    border-radius:26px;
+    overflow:hidden;
+    display:inline-grid;
+    place-items:center;
+    margin-bottom:6px;
+    border:1px solid var(--glass-outline);
+    box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  }
+
+  .pfp-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+
+  .user{
+    font-weight:700;
+    letter-spacing:.4px;
+    font-size:18px;
+  }
+  .subtitle{font-size:12px;color:var(--muted);margin-top:-6px}
+
+  .bio{
+    font-size:13px;
+    color:var(--muted);
+    line-height:1.35;
+    margin-top:6px;
+  }
+
+  /* Right column / links */
+  .panel{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:var(--card-radius);
+    padding:22px;
+    min-height:260px;
+    backdrop-filter: blur(var(--blur));
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 10px 40px rgba(2,6,23,0.6);
+  }
+
+  .links-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+    gap:14px;
+    margin-top:6px;
+  }
+
+  .link{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    padding:12px;
+    border-radius:12px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.007));
+    border:1px solid rgba(255,255,255,0.03);
+    transition:transform .18s ease, box-shadow .18s ease;
+    text-decoration:none;
+    color:inherit;
+  }
+  .link:focus, .link:hover{
+    transform: translateY(-6px);
+    box-shadow: 0 18px 50px rgba(16,22,44,0.6), 0 0 18px rgba(110,231,183,0.04);
+    outline: none;
+  }
+
+  .link .icon{
+    width:42px;height:42px;border-radius:10px;display:grid;place-items:center;
+    background: linear-gradient(135deg,var(--accent),var(--accent-2));
+    color:#061017;font-weight:700;font-size:16px;
+    box-shadow: 0 6px 18px rgba(110,231,183,0.06);
+  }
+
+  .link .meta{display:flex;flex-direction:column}
+  .link .title{font-weight:600}
+  .link .desc{font-size:12px;color:var(--muted);margin-top:3px}
+
+  /* footer / small controls */
+  .controls{display:flex;gap:10px;align-items:center;margin-top:12px}
+  .btn{
+    appearance:none;border:1px solid var(--glass-border);
+    background:transparent;padding:8px 12px;border-radius:10px;
+    color:var(--muted);font-size:13px;cursor:pointer;
+    transition:transform .12s ease, background .12s ease;
+  }
+  .btn:active{transform:scale(.98)}
+  .btn.ghost{border-style:dashed}
+
+  /* Top-right small neon chip */
+  .chip{
+    position:absolute;right:-8px;top:-8px;padding:8px 10px;border-radius:10px;
+    background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.04);backdrop-filter:blur(6px);font-size:12px;color:var(--muted)
+  }
+
+  /* Background image overlay if provided */
+  .bg-overlay{
+    position:fixed;inset:0;z-index:1;pointer-events:none;mix-blend-mode:screen;
+    opacity:.16;filter:blur(12px) saturate(120%) contrast(1.02);
+    transition:opacity .45s ease;
+  }
+
+  /* responsive */
+  @media (max-width:820px){
+    .container{grid-template-columns:1fr;align-items:stretch}
+    .chip{right:12px;top:12px}
+  }
+
+  /* reduced motion respect */
+  @media (prefers-reduced-motion: reduce){
+    .link, .profile, .panel { transition: none; animation: none; }
+    .scene::before { animation: none; }
+  }
+
+  /* small utility */
+  .muted{color:var(--muted)}
+  a.no-decor{text-decoration:none;color:inherit}
+</style>
+</head>
+<body class="scene">
+  <!-- Optional background image element; JS will set its src if background.png exists -->
+  <img id="bgCheck" class="bg-overlay" alt="" style="display:none" />
+
+  <main class="container" role="main" aria-labelledby="pageTitle">
+    <div class="profile" aria-hidden="false">
+      <div style="display:flex;gap:14px;align-items:center;">
+        <div class="pfp-wrap" id="pfpWrap" aria-hidden="false">
+          <!-- JS will place <img> or inline SVG avatar here -->
+          <svg id="pfpFallback" width="112" height="112" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="avatar placeholder">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1">
+                <stop offset="0" stop-color="#0ea5a4"/><stop offset="1" stop-color="#60a5fa"/>
+              </linearGradient>
+            </defs>
+            <rect width="120" height="120" rx="20" fill="url(#g1)"></rect>
+            <text id="initialsText" x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-size="46" font-family="Inter, system-ui, -apple-system" fill="#021418">MG</text>
+          </svg>
+        </div>
+
+        <div style="flex:1;">
+          <div id="pageTitle" class="user">Milo</div>
+          <div class="subtitle">High-tech link hub</div>
+        </div>
+      </div>
+
+      <div class="bio" id="bio">Links, social & quick access. Place <code>pfp.png</code> and <code>background.png</code> in the same folder to customize this page.</div>
+
+      <div class="controls" role="group" aria-label="page controls">
+        <button class="btn" id="copyBtn" title="Copy URL">Copy page URL</button>
+        <button class="btn ghost" id="themeBtn" title="Toggle accent">Toggle Accent</button>
+      </div>
     </div>
 
-    <footer>© 2025 Milo Grace</footer>
-  </div>
+    <section class="panel" aria-labelledby="linksHeading">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <h2 id="linksHeading" style="margin:0;font-size:20px">Quick Links</h2>
+          <div class="muted" style="font-size:12px;margin-top:4px">Tap or press Enter to open</div>
+        </div>
+        <div class="chip">v1.0</div>
+      </div>
+
+      <div class="links-grid" id="linksGrid" role="list">
+        <!-- Example links - edit these or generate via JS -->
+        <a class="link" href="https://twitter.com" target="_blank" rel="noopener noreferrer" role="listitem">
+          <div class="icon" aria-hidden="true">T</div>
+          <div class="meta"><div class="title">Twitter</div><div class="desc">Micro-updates & DMs</div></div>
+        </a>
+
+        <a class="link" href="https://github.com" target="_blank" rel="noopener noreferrer" role="listitem">
+          <div class="icon" aria-hidden="true">GH</div>
+          <div class="meta"><div class="title">GitHub</div><div class="desc">Projects & code</div></div>
+        </a>
+
+        <a class="link" href="https://discord.com" target="_blank" rel="noopener noreferrer" role="listitem">
+          <div class="icon" aria-hidden="true">D</div>
+          <div class="meta"><div class="title">Discord</div><div class="desc">Community chat</div></div>
+        </a>
+
+        <a class="link" href="https://youtube.com" target="_blank" rel="noopener noreferrer" role="listitem">
+          <div class="icon" aria-hidden="true">YT</div>
+          <div class="meta"><div class="title">YouTube</div><div class="desc">Videos & clips</div></div>
+        </a>
+
+        <a class="link" href="mailto:hello@example.com" role="listitem">
+          <div class="icon" aria-hidden="true">@</div>
+          <div class="meta"><div class="title">Email</div><div class="desc">hello@example.com</div></div>
+        </a>
+
+        <a class="link" href="#" role="listitem" id="customBtn">
+          <div class="icon" aria-hidden="true">+</div>
+          <div class="meta"><div class="title">Add custom</div><div class="desc">Configure in the file</div></div>
+        </a>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+        <div style="font-size:12px;color:var(--muted)">Made with ❤️ · High-tech mode</div>
+        <div style="font-size:12px;color:var(--muted)">Accessible · Responsive</div>
+      </div>
+    </section>
+  </main>
+
+<script>
+/*
+  Behavior:
+  - checks if pfp.png and background.png exist by creating Image objects and listening to onload/onerror
+  - if pfp exists, it uses it; else uses fallback initials (MG) — change initials below
+  - if background exists, it shows a blurred, faded background overlay
+*/
+
+(function(){
+  const PFPNAME = 'pfp.png';
+  const BGNAME = 'background.png';
+  const initials = 'MG'; // Change to your initials if you want
+
+  function tryLoadImage(src){
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve({ok:true, img});
+      img.onerror = ()=> resolve({ok:false});
+      img.src = src + (/\?/.test(src) ? '&' : '?') + 'v=' + Date.now(); // bust cache in dev
+    });
+  }
+
+  // pfp
+  const pfpWrap = document.getElementById('pfpWrap');
+  const pfpFallbackText = document.getElementById('initialsText');
+  pfpFallbackText.textContent = initials;
+
+  tryLoadImage(PFPNAME).then(res=>{
+    if(res.ok){
+      // apply the photo
+      const i = document.createElement('img');
+      i.alt = 'Profile picture';
+      i.src = PFPNAME + '?v=' + Date.now();
+      i.loading = 'eager';
+      // clear existing fallback and append
+      pfpWrap.innerHTML = '';
+      pfpWrap.appendChild(i);
+    } else {
+      // keep SVG fallback; tweak colors programmatically if desired
+      pfpWrap.querySelector('rect')?.setAttribute('rx', '20');
+    }
+  });
+
+  // background
+  const bgImg = document.getElementById('bgCheck');
+  tryLoadImage(BGNAME).then(res=>{
+    if(res.ok){
+      bgImg.src = BGNAME + '?v=' + Date.now();
+      bgImg.style.display = 'block';
+      // style the background image overlay
+      bgImg.style.objectFit = 'cover';
+      bgImg.style.width = '100%';
+      bgImg.style.height = '100%';
+      bgImg.style.opacity = '.16';
+      bgImg.style.filter = 'blur(14px) saturate(120%) contrast(1.02)';
+      bgImg.style.pointerEvents = 'none';
+    } else {
+      // no background provided; add a subtle grid via CSS (already present) or leave gradient
+    }
+  });
+
+  // utility: copy URL
+  const copyBtn = document.getElementById('copyBtn');
+  copyBtn.addEventListener('click', async ()=>{
+    try{
+      await navigator.clipboard.writeText(location.href);
+      copyBtn.textContent = 'Copied!';
+      setTimeout(()=>copyBtn.textContent = 'Copy page URL', 1500);
+    }catch(e){
+      copyBtn.textContent = 'Unable to copy';
+      setTimeout(()=>copyBtn.textContent = 'Copy page URL', 1500);
+    }
+  });
+
+  // toggle accent (just toggles CSS var for fun)
+  const themeBtn = document.getElementById('themeBtn');
+  themeBtn.addEventListener('click', ()=>{
+    const root = document.documentElement;
+    const a = getComputedStyle(root).getPropertyValue('--accent').trim();
+    if(a === '#6EE7B7'){
+      root.style.setProperty('--accent','#C084FC');
+      root.style.setProperty('--accent-2','#60a5fa');
+      themeBtn.textContent = 'Accent: Purple';
+    }else{
+      root.style.setProperty('--accent','#6EE7B7');
+      root.style.setProperty('--accent-2','#7dd3fc');
+      themeBtn.textContent = 'Accent: Mint';
+    }
+  });
+
+  // keyboard accessibility: allow Enter on link-like elements
+  document.getElementById('linksGrid').addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter' && e.target.closest('.link')){
+      e.target.closest('.link').click();
+    }
+  });
+
+  // small example: open a custom modal or action
+  document.getElementById('customBtn').addEventListener('click', (e)=>{
+    e.preventDefault();
+    alert('Edit the HTML file to change links or add more. Replace pfp.png/background.png to customize visuals.');
+  });
+
+  // Focus first link for keyboard users
+  const firstLink = document.querySelector('.link');
+  if(firstLink) firstLink.setAttribute('tabindex','0');
+
+})();
+</script>
 </body>
 </html>
