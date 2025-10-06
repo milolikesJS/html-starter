@@ -1,170 +1,1244 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Milo's Links</title>
-<style>
-  /* Reset & body */
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: Arial, sans-serif;
-    background: #000;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    overflow: hidden;
-    position: relative;
-  }
-
-  /* Rain animation */
-  .rain {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    overflow: hidden;
-  }
-  .drop {
-    position: absolute;
-    width: 2px;
-    height: 10px;
-    background: white;
-    opacity: 0.2;
-    animation: fall linear infinite;
-  }
-  @keyframes fall {
-    0% { transform: translateY(-10px); }
-    100% { transform: translateY(100vh); }
-  }
-
-  /* Profile */
-  .profile {
-    text-align: center;
-    margin-top: 60px;
-    z-index: 1;
-  }
-  .profile img {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-  }
-  h1 {
-    margin: 10px 0 5px;
-    font-size: 2rem;
-  }
-  p.bio {
-    color: #ccc;
-    margin-bottom: 20px;
-    line-height: 1.4;
-  }
-
-  /* Badges */
-  .badges {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 30px;
-  }
-  .badges img {
-    width: 50px;
-    height: 50px;
-    border-radius: 8px;
-    filter: drop-shadow(0 0 10px white);
-    transition: transform 0.2s;
-    cursor: pointer;
-  }
-  .badges img:hover {
-    transform: scale(1.1);
-  }
-
-  /* Links with icons */
-  .links {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 100%;
-    max-width: 350px;
-    z-index: 1;
-  }
-  .link {
-    display: flex;
-    align-items: center;
-    justify-content: center; /* center both icon and text */
-    gap: 10px;
-    padding: 10px 18px;
-    background: #111;
-    border-radius: 12px;
-    text-decoration: none;
-    font-size: 1.05rem;
-    color: #fff;
-    transition: all 0.2s;
-    width: 100%; /* full width boxes */
-  }
-  .link:hover {
-    background: #fff;
-    color: #000;
-  }
-  .link img {
-    width: 28px;
-    height: 28px;
-    flex-shrink: 0;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackjack - Casino Table</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(255,215,0,0.05) 0%, transparent 50%);
+            pointer-events: none;
+            animation: ambientGlow 4s ease-in-out infinite;
+        }
+        @keyframes ambientGlow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        #game-container {
+            width: 95%;
+            max-width: 1200px;
+            background: linear-gradient(135deg, #0d5e2b 0%, #1a7a3e 30%, #0d5e2b 70%, #0a4922 100%);
+            border-radius: 200px;
+            padding: 40px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.7),
+                        inset 0 2px 0 rgba(255,255,255,0.1),
+                        0 0 100px rgba(255,215,0,0.1);
+            border: 12px solid #5c3317;
+            position: relative;
+            animation: tableEntrance 0.8s ease-out;
+        }
+        @keyframes tableEntrance {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        #game-container::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border: 3px solid rgba(255,215,0,0.4);
+            border-radius: 180px;
+            pointer-events: none;
+            box-shadow: inset 0 0 30px rgba(255,215,0,0.1);
+        }
+        #game-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 200px;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .game-header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        .game-header h1 {
+            font-size: 3em;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255,215,0,0.5);
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            animation: titleShine 3s ease-in-out infinite;
+        }
+        @keyframes titleShine {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            background: linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 100%);
+            padding: 12px 25px;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 1.2em;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.4),
+                        0 4px 12px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,215,0,0.3);
+            transition: all 0.3s;
+        }
+        .stat-item:hover {
+            transform: translateY(-2px);
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.4),
+                        0 6px 16px rgba(0,0,0,0.4);
+        }
+        .stat-label {
+            color: #ffd700;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255,215,0,0.5);
+        }
+        .bet-container {
+            background: linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: center;
+            border: 2px solid rgba(255,215,0,0.2);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        .bet-label {
+            color: #ffd700;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-shadow: 0 0 15px rgba(255,215,0,0.6);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        .chips {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .chip {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4),
+                        inset 0 2px 4px rgba(255,255,255,0.3);
+            border: 5px solid;
+            position: relative;
+        }
+        .chip::before {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            right: 10%;
+            bottom: 10%;
+            border: 2px dashed;
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+        .chip:hover {
+            transform: translateY(-8px) scale(1.15) rotate(5deg);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.5),
+                        inset 0 2px 4px rgba(255,255,255,0.4);
+        }
+        .chip:active {
+            transform: translateY(-2px) scale(1.05);
+        }
+        .chip-5 {
+            background: linear-gradient(135deg, #e74c3c, #c0392b, #e74c3c);
+            border-color: #fff;
+            color: #fff;
+        }
+        .chip-5::before {
+            border-color: #fff;
+        }
+        .chip-10 {
+            background: linear-gradient(135deg, #3498db, #2980b9, #3498db);
+            border-color: #fff;
+            color: #fff;
+        }
+        .chip-10::before {
+            border-color: #fff;
+        }
+        .chip-25 {
+            background: linear-gradient(135deg, #27ae60, #229954, #27ae60);
+            border-color: #fff;
+            color: #fff;
+        }
+        .chip-25::before {
+            border-color: #fff;
+        }
+        .chip-50 {
+            background: linear-gradient(135deg, #f39c12, #d68910, #f39c12);
+            border-color: #fff;
+            color: #fff;
+        }
+        .chip-50::before {
+            border-color: #fff;
+        }
+        .chip-100 {
+            background: linear-gradient(135deg, #1a1a1a, #2c3e50, #1a1a1a);
+            border-color: #ffd700;
+            color: #ffd700;
+        }
+        .chip-100::before {
+            border-color: #ffd700;
+        }
+        .bet-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .bet-btn {
+            padding: 10px 25px;
+            font-size: 1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .bet-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+        }
+        .bet-btn-clear {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+        .bet-btn-allin {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #000;
+            font-weight: 900;
+            border: 2px solid #fff;
+            animation: allInPulse 2s ease-in-out infinite;
+        }
+        @keyframes allInPulse {
+            0%, 100% { box-shadow: 0 4px 10px rgba(0,0,0,0.3), 0 0 20px rgba(255,215,0,0.3); }
+            50% { box-shadow: 0 6px 15px rgba(0,0,0,0.4), 0 0 40px rgba(255,215,0,0.6); }
+        }
+        .current-bet {
+            color: #fff;
+            font-size: 1.4em;
+            background: linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 100%);
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 25px;
+            margin-top: 10px;
+            border: 2px solid rgba(255,215,0,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            font-weight: bold;
+        }
+        .current-bet span {
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255,215,0,0.5);
+        }
+        .message {
+            text-align: center;
+            font-size: 2em;
+            font-weight: bold;
+            margin: 25px 0;
+            min-height: 50px;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255,215,0,0.7),
+                        0 0 40px rgba(255,215,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .message.win {
+            color: #2ecc71;
+            text-shadow: 0 0 20px rgba(46,204,113,0.7),
+                        0 0 40px rgba(46,204,113,0.3);
+            animation: winPulse 0.5s ease-in-out;
+        }
+        @keyframes winPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .message.lose {
+            color: #e74c3c;
+            text-shadow: 0 0 20px rgba(231,76,60,0.7);
+        }
+        .message.push {
+            color: #f39c12;
+            text-shadow: 0 0 20px rgba(243,156,18,0.7);
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .card-area {
+            margin: 35px 0;
+            position: relative;
+        }
+        .card-area-label {
+            color: #ffd700;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            text-shadow: 0 0 15px rgba(255,215,0,0.5);
+            letter-spacing: 2px;
+        }
+        .cards-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            min-height: 150px;
+            align-items: center;
+            flex-wrap: wrap;
+            perspective: 1000px;
+        }
+        .card {
+            width: 100px;
+            height: 140px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5), 
+                        0 4px 10px rgba(0,0,0,0.3),
+                        0 0 20px rgba(255,215,0,0.1);
+            position: relative;
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+            font-family: Arial, sans-serif;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        .card:hover {
+            box-shadow: 0 12px 30px rgba(0,0,0,0.6), 
+                        0 6px 15px rgba(0,0,0,0.4),
+                        0 0 30px rgba(255,215,0,0.2);
+            transform: translateY(-5px);
+        }
+        .card.new-card {
+            animation: dealCard 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            opacity: 0;
+            transform: translateY(-100px) rotate(-20deg);
+        }
+        @keyframes dealCard {
+            to {
+                opacity: 1;
+                transform: translateY(0) rotate(0);
+            }
+        }
+        .card.face-down {
+            background: linear-gradient(135deg, #8b0000 0%, #dc143c 25%, #ff6347 50%, #dc143c 75%, #8b0000 100%);
+            border: 3px solid #ffd700;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5), 
+                        0 0 30px rgba(220,20,60,0.4);
+        }
+        .card.face-down::before {
+            content: '🂠';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5em;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255,215,0,0.5);
+        }
+        .card-top-left {
+            position: absolute;
+            top: 8px;
+            left: 10px;
+            font-size: 1.4em;
+            font-weight: bold;
+            line-height: 1;
+            text-align: center;
+        }
+        .card-top-left .value {
+            display: block;
+            margin-bottom: 3px;
+            font-size: 1.2em;
+        }
+        .card-top-left .suit {
+            display: block;
+            font-size: 1em;
+        }
+        .card-bottom-right {
+            position: absolute;
+            bottom: 8px;
+            right: 10px;
+            font-size: 1.4em;
+            font-weight: bold;
+            line-height: 1;
+            text-align: center;
+            transform: rotate(180deg);
+        }
+        .card-bottom-right .value {
+            display: block;
+            margin-bottom: 3px;
+            font-size: 1.2em;
+        }
+        .card-bottom-right .suit {
+            display: block;
+            font-size: 1em;
+        }
+        .card-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4.5em;
+            opacity: 0.12;
+        }
+        .red {
+            color: #e74c3c;
+        }
+        .black {
+            color: #2c3e50;
+        }
+        .score-display {
+            text-align: center;
+            color: #fff;
+            font-size: 1.4em;
+            margin-top: 15px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 100%);
+            display: inline-block;
+            padding: 8px 25px;
+            border-radius: 20px;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 2px solid rgba(255,215,0,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            font-weight: bold;
+        }
+        .score-display.bust {
+            color: #e74c3c;
+            border-color: rgba(231,76,60,0.5);
+            animation: bustShake 0.5s ease-in-out;
+        }
+        @keyframes bustShake {
+            0%, 100% { transform: translateX(-50%) rotate(0deg); }
+            25% { transform: translateX(-50%) rotate(-5deg); }
+            75% { transform: translateX(-50%) rotate(5deg); }
+        }
+        .score-display.blackjack {
+            color: #ffd700;
+            border-color: rgba(255,215,0,0.7);
+            animation: blackjackGlow 1s ease-in-out infinite;
+        }
+        @keyframes blackjackGlow {
+            0%, 100% { box-shadow: 0 4px 12px rgba(0,0,0,0.3), 0 0 20px rgba(255,215,0,0.4); }
+            50% { box-shadow: 0 4px 12px rgba(0,0,0,0.3), 0 0 40px rgba(255,215,0,0.8); }
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1000;
+        }
+        .btn {
+            padding: 18px 45px;
+            font-size: 1.3em;
+            font-weight: bold;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        .btn:hover:not(:disabled) {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        .btn:active:not(:disabled) {
+            transform: translateY(-1px) scale(1.02);
+        }
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        .btn-deal {
+            background: linear-gradient(135deg, #2ecc71, #27ae60, #229954);
+            color: white;
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+        .btn-hit {
+            background: linear-gradient(135deg, #3498db, #2980b9, #21618c);
+            color: white;
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+        .btn-stand {
+            background: linear-gradient(135deg, #e74c3c, #c0392b, #a93226);
+            color: white;
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+        .btn-double {
+            background: linear-gradient(135deg, #f39c12, #d68910, #b9770e);
+            color: white;
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+        .btn-job {
+            background: linear-gradient(135deg, #8e44ad, #9b59b6, #8e44ad);
+            color: white;
+            border: 3px solid rgba(255,255,255,0.3);
+            animation: jobPulse 1.5s ease-in-out infinite;
+        }
+        @keyframes jobPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .btn-restart {
+            background: linear-gradient(135deg, #16a085, #1abc9c, #16a085);
+            color: white;
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+        .game-over-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            animation: fadeIn 0.5s ease-out;
+            pointer-events: none;
+        }
+        .game-over-overlay.active {
+            pointer-events: auto;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .game-over-content {
+            text-align: center;
+            color: #fff;
+        }
+        .game-over-title {
+            font-size: 4em;
+            color: #e74c3c;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(231,76,60,0.8);
+            animation: shakeTitle 0.5s ease-in-out;
+        }
+        @keyframes shakeTitle {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .game-over-text {
+            font-size: 1.8em;
+            margin-bottom: 30px;
+            color: #ffd700;
+        }
+        .win-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ffd700;
+            animation: confettiFall 3s linear forwards;
+        }
+        @keyframes confettiFall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        @media (max-width: 768px) {
+            #game-container {
+                padding: 20px;
+                border-radius: 50px;
+            }
+            #game-container::before {
+                border-radius: 40px;
+            }
+            .game-header h1 {
+                font-size: 2em;
+            }
+            .card {
+                width: 80px;
+                height: 112px;
+            }
+            .card-center {
+                font-size: 3em;
+            }
+            .chip {
+                width: 65px;
+                height: 65px;
+                font-size: 1em;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div id="game-container">
+        <div class="game-header">
+            <h1>♠️ BLACKJACK ♣️</h1>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-label">Chips:</span> $<span id="chips">1000</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Wins:</span> <span id="wins">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Losses:</span> <span id="losses">0</span>
+                </div>
+            </div>
+        </div>
+        <div class="bet-container" id="bet-container">
+            <div class="bet-label">Place Your Bet</div>
+            <div class="chips">
+                <div class="chip chip-5" data-value="5">$5</div>
+                <div class="chip chip-10" data-value="10">$10</div>
+                <div class="chip chip-25" data-value="25">$25</div>
+                <div class="chip chip-50" data-value="50">$50</div>
+                <div class="chip chip-100" data-value="100">$100</div>
+            </div>
+            <div class="current-bet">Current Bet: $<span id="current-bet">0</span></div>
+            <div class="bet-actions">
+                <button class="bet-btn bet-btn-clear" onclick="game.clearBet()">Clear Bet</button>
+                <button class="bet-btn bet-btn-allin" onclick="game.allIn()">🔥 ALL IN 🔥</button>
+            </div>
+        </div>
+        <div class="message" id="message"></div>
+        <div class="card-area">
+            <div class="card-area-label">Dealer's Hand</div>
+            <div class="cards-container" id="dealer-cards"></div>
+            <div class="score-display" id="dealer-score"></div>
+        </div>
+        <div class="card-area">
+            <div class="card-area-label">Your Hand</div>
+            <div class="cards-container" id="player-cards"></div>
+            <div class="score-display" id="player-score"></div>
+        </div>
+        <div class="controls">
+            <button class="btn btn-deal" id="deal-btn">Deal</button>
+        </div>
+        <div class="controls" id="game-controls" style="display: none;">
+            <button class="btn btn-hit" id="hit-btn">Hit</button>
+            <button class="btn btn-stand" id="stand-btn">Stand</button>
+            <button class="btn btn-double" id="double-btn">Double Down</button>
+        </div>
+        <div class="controls" id="broke-controls" style="display: none;">
+            <button class="btn btn-job" id="job-btn">💼 Get a Job 💼</button>
+            <button class="btn btn-restart" id="restart-btn">🔄 Play Again 🔄</button>
+        </div>
+    </div>
+    <div class="win-effect" id="win-effect"></div>
+    <div class="game-over-overlay" id="game-over-overlay">
+        <div class="game-over-content">
+            <div class="game-over-title">💸 BROKE! 💸</div>
+            <div class="game-over-text">You've lost all your chips!</div>
+        </div>
+    </div>
 
-<div class="rain" id="rain"></div>
+    <script>
+        class BlackjackGame {
+            constructor() {
+                this.deck = [];
+                this.playerHand = [];
+                this.dealerHand = [];
+                this.currentBet = 0;
+                this.chips = 1000;
+                this.wins = 0;
+                this.losses = 0;
+                this.gameInProgress = false;
+                this.dealerRevealed = false;
+                
+                this.suits = ['♠️', '♥️', '♦️', '♣️'];
+                this.values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+                
+                this.initializeElements();
+                this.attachEventListeners();
+                this.updateDisplay();
+            }
+            
+            initializeElements() {
+                this.dealerCardsEl = document.getElementById('dealer-cards');
+                this.playerCardsEl = document.getElementById('player-cards');
+                this.dealerScoreEl = document.getElementById('dealer-score');
+                this.playerScoreEl = document.getElementById('player-score');
+                this.messageEl = document.getElementById('message');
+                this.chipsEl = document.getElementById('chips');
+                this.winsEl = document.getElementById('wins');
+                this.lossesEl = document.getElementById('losses');
+                this.currentBetEl = document.getElementById('current-bet');
+                this.dealBtn = document.getElementById('deal-btn');
+                this.hitBtn = document.getElementById('hit-btn');
+                this.standBtn = document.getElementById('stand-btn');
+                this.doubleBtn = document.getElementById('double-btn');
+                this.jobBtn = document.getElementById('job-btn');
+                this.restartBtn = document.getElementById('restart-btn');
+                this.betContainer = document.getElementById('bet-container');
+                this.gameControls = document.getElementById('game-controls');
+                this.brokeControls = document.getElementById('broke-controls');
+                this.winEffectEl = document.getElementById('win-effect');
+                this.gameOverOverlay = document.getElementById('game-over-overlay');
+            }
+            
+            attachEventListeners() {
+                this.dealBtn.addEventListener('click', () => this.startGame());
+                this.hitBtn.addEventListener('click', () => this.hit());
+                this.standBtn.addEventListener('click', () => this.stand());
+                this.doubleBtn.addEventListener('click', () => this.doubleDown());
+                this.jobBtn.addEventListener('click', () => this.getJob());
+                this.restartBtn.addEventListener('click', () => this.restart());
+                
+                document.querySelectorAll('.chip').forEach(chip => {
+                    chip.addEventListener('click', () => {
+                        const value = parseInt(chip.dataset.value);
+                        this.placeBet(value);
+                    });
+                });
+            }
+            
+            createDeck() {
+                this.deck = [];
+                for (let suit of this.suits) {
+                    for (let value of this.values) {
+                        const color = (suit === '♥️' || suit === '♦️') ? 'red' : 'black';
+                        this.deck.push({ suit, value, color });
+                    }
+                }
+                this.shuffleDeck();
+            }
+            
+            shuffleDeck() {
+                for (let i = this.deck.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [this.deck[i], this.deck[j]] = [this.deck[j], this.deck[i]];
+                }
+            }
+            
+            getCardValue(card) {
+                if (card.value === 'A') return 11;
+                if (['J', 'Q', 'K'].includes(card.value)) return 10;
+                return parseInt(card.value);
+            }
+            
+            calculateScore(hand) {
+                let score = 0;
+                let aces = 0;
+                
+                for (let card of hand) {
+                    const value = this.getCardValue(card);
+                    score += value;
+                    if (card.value === 'A') aces++;
+                }
+                
+                while (score > 21 && aces > 0) {
+                    score -= 10;
+                    aces--;
+                }
+                
+                return score;
+            }
+            
+            placeBet(amount) {
+                if (this.gameInProgress) return;
+                
+                if (this.chips >= amount) {
+                    if (this.currentBet + amount <= this.chips) {
+                        this.currentBet += amount;
+                        this.updateDisplay();
+                    } else {
+                        this.showMessage('Not enough chips for that bet!', 'lose');
+                        setTimeout(() => {
+                            if (!this.gameInProgress) this.messageEl.textContent = '';
+                        }, 2000);
+                    }
+                } else {
+                    this.showMessage('Not enough chips!', 'lose');
+                    setTimeout(() => {
+                        if (!this.gameInProgress) this.messageEl.textContent = '';
+                    }, 2000);
+                }
+            }
+            
+            clearBet() {
+                if (this.gameInProgress) return;
+                this.currentBet = 0;
+                this.updateDisplay();
+                this.messageEl.textContent = '';
+            }
+            
+            allIn() {
+                if (this.gameInProgress) return;
+                if (this.chips === 0) {
+                    this.showMessage('No chips to bet!', 'lose');
+                    return;
+                }
+                this.currentBet = this.chips;
+                this.updateDisplay();
+                this.showMessage('🔥 ALL IN! 🔥', 'win');
+                setTimeout(() => {
+                    if (!this.gameInProgress) this.messageEl.textContent = '';
+                }, 2000);
+            }
+            
+            startGame() {
+                if (this.currentBet === 0) {
+                    this.showMessage('Place a bet first!', 'lose');
+                    setTimeout(() => {
+                        this.messageEl.textContent = '';
+                    }, 2000);
+                    return;
+                }
+                
+                if (this.chips < this.currentBet) {
+                    this.showMessage('Not enough chips!', 'lose');
+                    setTimeout(() => {
+                        this.messageEl.textContent = '';
+                    }, 2000);
+                    return;
+                }
+                
+                this.chips -= this.currentBet;
+                this.gameInProgress = true;
+                this.dealerRevealed = false;
+                this.playerHand = [];
+                this.dealerHand = [];
+                
+                this.createDeck();
+                
+                this.playerHand.push(this.deck.pop());
+                this.dealerHand.push(this.deck.pop());
+                this.playerHand.push(this.deck.pop());
+                this.dealerHand.push(this.deck.pop());
+                
+                this.betContainer.style.display = 'none';
+                this.dealBtn.parentElement.style.display = 'none';
+                this.gameControls.style.display = 'flex';
+                this.hitBtn.disabled = false;
+                this.standBtn.disabled = false;
+                this.doubleBtn.disabled = false;
+                
+                // Disable double down if not enough chips
+                if (this.chips < this.currentBet) {
+                    this.doubleBtn.disabled = true;
+                }
+                
+                this.renderHands();
+                this.updateScores();
+                this.updateDisplay();
+                this.messageEl.textContent = '';
+                
+                if (this.calculateScore(this.playerHand) === 21) {
+                    setTimeout(() => this.stand(), 500);
+                }
+            }
+            
+            hit() {
+                if (!this.gameInProgress) return;
+                
+                // Disable double down after first hit
+                this.doubleBtn.disabled = true;
+                
+                this.playerHand.push(this.deck.pop());
+                this.renderHands();
+                this.updateScores();
+                
+                const playerScore = this.calculateScore(this.playerHand);
+                if (playerScore > 21) {
+                    setTimeout(() => this.endGame('bust'), 500);
+                } else if (playerScore === 21) {
+                    setTimeout(() => this.stand(), 500);
+                }
+            }
+            
+            doubleDown() {
+                if (!this.gameInProgress) return;
+                if (this.chips < this.currentBet) {
+                    this.showMessage('Not enough chips to double!', 'lose');
+                    return;
+                }
+                
+                this.chips -= this.currentBet;
+                this.currentBet *= 2;
+                this.updateDisplay();
+                
+                this.playerHand.push(this.deck.pop());
+                this.renderHands();
+                this.updateScores();
+                
+                const playerScore = this.calculateScore(this.playerHand);
+                if (playerScore > 21) {
+                    setTimeout(() => this.endGame('bust'), 500);
+                } else {
+                    setTimeout(() => this.stand(), 500);
+                }
+            }
+            
+            stand() {
+                if (!this.gameInProgress) return;
+                
+                this.dealerRevealed = true;
+                this.hitBtn.disabled = true;
+                this.standBtn.disabled = true;
+                
+                this.renderHands();
+                this.dealerPlay();
+            }
+            
+            dealerPlay() {
+                const dealerScore = this.calculateScore(this.dealerHand);
+                
+                if (dealerScore < 17) {
+                    setTimeout(() => {
+                        this.dealerHand.push(this.deck.pop());
+                        this.renderHands();
+                        this.updateScores();
+                        this.dealerPlay();
+                    }, 800);
+                } else {
+                    setTimeout(() => this.endGame('compare'), 500);
+                }
+            }
+            
+            createConfetti() {
+                const colors = ['#ffd700', '#ff6347', '#3498db', '#2ecc71', '#f39c12', '#e74c3c'];
+                for (let i = 0; i < 50; i++) {
+                    setTimeout(() => {
+                        const confetti = document.createElement('div');
+                        confetti.className = 'confetti';
+                        confetti.style.left = Math.random() * 100 + '%';
+                        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                        confetti.style.animationDelay = Math.random() * 0.3 + 's';
+                        confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                        this.winEffectEl.appendChild(confetti);
+                        
+                        setTimeout(() => confetti.remove(), 3000);
+                    }, i * 30);
+                }
+            }
+            
+            endGame(reason) {
+                this.gameInProgress = false;
+                this.dealerRevealed = true;
+                this.renderHands();
+                this.updateScores();
+                
+                const playerScore = this.calculateScore(this.playerHand);
+                const dealerScore = this.calculateScore(this.dealerHand);
+                
+                let message = '';
+                let messageClass = '';
+                let isWin = false;
+                
+                if (reason === 'bust') {
+                    message = '💥 BUST! Dealer Wins 💥';
+                    messageClass = 'lose';
+                    this.losses++;
+                } else {
+                    if (playerScore > 21) {
+                        message = '💥 BUST! Dealer Wins 💥';
+                        messageClass = 'lose';
+                        this.losses++;
+                    } else if (dealerScore > 21) {
+                        message = '🎉 Dealer Busts! You Win! 🎉';
+                        messageClass = 'win';
+                        this.chips += this.currentBet * 2;
+                        this.wins++;
+                        isWin = true;
+                    } else if (playerScore > dealerScore) {
+                        if (playerScore === 21 && this.playerHand.length === 2) {
+                            message = '🌟 BLACKJACK! WINNER! 🌟';
+                            messageClass = 'win';
+                            this.chips += Math.floor(this.currentBet * 2.5);
+                            isWin = true;
+                        } else {
+                            message = '🎊 YOU WIN! 🎊';
+                            messageClass = 'win';
+                            this.chips += this.currentBet * 2;
+                            isWin = true;
+                        }
+                        this.wins++;
+                    } else if (playerScore < dealerScore) {
+                        message = '😔 Dealer Wins';
+                        messageClass = 'lose';
+                        this.losses++;
+                    } else {
+                        message = '🤝 Push - It\'s a Tie';
+                        messageClass = 'push';
+                        this.chips += this.currentBet;
+                    }
+                }
+                
+                if (isWin) {
+                    this.createConfetti();
+                }
+                
+                this.showMessage(message, messageClass);
+                this.resetForNextRound();
+            }
+            
+            resetForNextRound() {
+                setTimeout(() => {
+                    this.currentBet = 0;
+                    
+                    if (this.chips === 0) {
+                        this.showGameOver();
+                    } else {
+                        this.betContainer.style.display = 'block';
+                        this.dealBtn.parentElement.style.display = 'flex';
+                        this.gameControls.style.display = 'none';
+                        this.dealBtn.disabled = false;
+                        this.hitBtn.disabled = true;
+                        this.standBtn.disabled = true;
+                        this.doubleBtn.disabled = true;
+                        this.updateDisplay();
+                        this.messageEl.textContent = '';
+                    }
+                }, 4000);
+            }
+            
+            showGameOver() {
+                // Clear the board
+                this.dealerCardsEl.innerHTML = '';
+                this.playerCardsEl.innerHTML = '';
+                this.dealerScoreEl.textContent = '';
+                this.playerScoreEl.textContent = '';
+                this.messageEl.textContent = '';
+                
+                // Hide all other controls
+                this.betContainer.style.display = 'none';
+                this.dealBtn.parentElement.style.display = 'none';
+                this.gameControls.style.display = 'none';
+                
+                // Show game over overlay and broke controls
+                this.gameOverOverlay.style.display = 'flex';
+                this.gameOverOverlay.classList.add('active');
+                this.brokeControls.style.display = 'flex';
+                
+                this.updateDisplay();
+            }
+            
+            getJob() {
+                window.open('https://www.indeed.com/', '_blank');
+            }
+            
+            restart() {
+                // Reset everything
+                this.chips = 1000;
+                this.wins = 0;
+                this.losses = 0;
+                this.currentBet = 0;
+                this.gameInProgress = false;
+                
+                // Hide game over overlay and broke controls
+                this.gameOverOverlay.style.display = 'none';
+                this.gameOverOverlay.classList.remove('active');
+                this.brokeControls.style.display = 'none';
+                
+                // Show betting interface
+                this.betContainer.style.display = 'block';
+                this.dealBtn.parentElement.style.display = 'flex';
+                
+                // Clear cards
+                this.dealerCardsEl.innerHTML = '';
+                this.playerCardsEl.innerHTML = '';
+                this.dealerScoreEl.textContent = '';
+                this.playerScoreEl.textContent = '';
+                this.messageEl.textContent = '';
+                
+                this.updateDisplay();
+            }
+            
+            renderHands() {
+                this.renderCards(this.dealerCardsEl, this.dealerHand, !this.dealerRevealed);
+                this.renderCards(this.playerCardsEl, this.playerHand, false);
+            }
+            
+            renderCards(container, hand, hideFirst) {
+                const existingCards = container.querySelectorAll('.card');
+                const existingCount = existingCards.length;
+                
+                if (hand.length > existingCount) {
+                    for (let i = existingCount; i < hand.length; i++) {
+                        const card = hand[i];
+                        const cardEl = document.createElement('div');
+                        cardEl.className = 'card new-card';
+                        cardEl.dataset.cardIndex = i;
+                        
+                        if (hideFirst && i === 1) {
+                            cardEl.classList.add('face-down');
+                        } else {
+                            cardEl.innerHTML = `
+                                <div class="card-top-left ${card.color}">
+                                    <span class="value">${card.value}</span>
+                                    <span class="suit">${card.suit}</span>
+                                </div>
+                                <div class="card-center ${card.color}">${card.suit}</div>
+                                <div class="card-bottom-right ${card.color}">
+                                    <span class="value">${card.value}</span>
+                                    <span class="suit">${card.suit}</span>
+                                </div>
+                            `;
+                        }
+                        
+                        container.appendChild(cardEl);
+                        
+                        setTimeout(() => {
+                            cardEl.classList.remove('new-card');
+                        }, 600);
+                    }
+                } else {
+                    container.innerHTML = '';
+                    
+                    hand.forEach((card, index) => {
+                        const cardEl = document.createElement('div');
+                        cardEl.className = 'card new-card';
+                        cardEl.dataset.cardIndex = index;
+                        
+                        if (hideFirst && index === 1) {
+                            cardEl.classList.add('face-down');
+                        } else {
+                            cardEl.innerHTML = `
+                                <div class="card-top-left ${card.color}">
+                                    <span class="value">${card.value}</span>
+                                    <span class="suit">${card.suit}</span>
+                                </div>
+                                <div class="card-center ${card.color}">${card.suit}</div>
+                                <div class="card-bottom-right ${card.color}">
+                                    <span class="value">${card.value}</span>
+                                    <span class="suit">${card.suit}</span>
+                                </div>
+                            `;
+                        }
+                        
+                        cardEl.style.animationDelay = `${index * 0.1}s`;
+                        container.appendChild(cardEl);
+                        
+                        setTimeout(() => {
+                            cardEl.classList.remove('new-card');
+                        }, 600 + (index * 100));
+                    });
+                }
+            }
+            
+            updateScores() {
+                const playerScore = this.calculateScore(this.playerHand);
+                const dealerScore = this.calculateScore(this.dealerHand);
+                
+                this.playerScoreEl.textContent = `Score: ${playerScore}`;
+                this.playerScoreEl.className = 'score-display';
+                
+                if (playerScore > 21) {
+                    this.playerScoreEl.classList.add('bust');
+                } else if (playerScore === 21 && this.playerHand.length === 2) {
+                    this.playerScoreEl.classList.add('blackjack');
+                    this.playerScoreEl.textContent = '⭐ BLACKJACK! ⭐';
+                }
+                
+                if (this.dealerRevealed) {
+                    this.dealerScoreEl.textContent = `Score: ${dealerScore}`;
+                    this.dealerScoreEl.className = 'score-display';
+                    
+                    if (dealerScore > 21) {
+                        this.dealerScoreEl.classList.add('bust');
+                    } else if (dealerScore === 21 && this.dealerHand.length === 2) {
+                        this.dealerScoreEl.classList.add('blackjack');
+                        this.dealerScoreEl.textContent = '⭐ BLACKJACK! ⭐';
+                    }
+                } else {
+                    const visibleValue = this.getCardValue(this.dealerHand[0]);
+                    this.dealerScoreEl.textContent = `Showing: ${visibleValue}`;
+                }
+            }
+            
+            showMessage(text, className = '') {
+                this.messageEl.textContent = text;
+                this.messageEl.className = `message ${className}`;
+            }
+            
+            updateDisplay() {
+                this.chipsEl.textContent = this.chips;
+                this.winsEl.textContent = this.wins;
+                this.lossesEl.textContent = this.losses;
+                this.currentBetEl.textContent = this.currentBet;
+            }
+        }
 
-<div class="profile">
-  <img src="pfp.png" alt="Profile Picture">
-  <h1>Milo</h1>
-  <p class="bio">Coder, Learning to be Electrical Engineer and also learning Cyber Security, Bot Developer</p>
-  
-  <div class="badges">
-    <img src="Badge1.png" alt="Badge">
-    <img src="Badge2.png" alt="Badge">
-    <img src="Badge3.png" alt="Badge">
-    <img src="Badge4.png" alt="Badge">
-    <img src="Badge5.png" alt="Badge">
-  </div>
-</div>
-
-<div class="links">
-  <a class="link" href="https://steamcommunity.com/id/yourid" target="_blank">
-    <img src="steam.png" alt="Steam"> Steam
-  </a>
-  <a class="link" href="https://discord.gg/yourlink" target="_blank">
-    <img src="discord.png" alt="Discord"> Discord
-  </a>
-  <a class="link" href="https://minecraft.net/profile/yourid" target="_blank">
-    <img src="minecraft.png" alt="Minecraft"> Minecraft
-  </a>
-  <a class="link" href="https://vrchat.com/home/user/yourid" target="_blank">
-    <img src="vrchat.png" alt="VRChat"> VRChat
-  </a>
-  <a class="link" href="https://www.tiktok.com/@yourname" target="_blank">
-    <img src="tiktok.png" alt="TikTok"> TikTok
-  </a>
-</div>
-
-<script>
-  // Rain drops
-  const rain = document.getElementById('rain');
-  const dropsCount = 150;
-  for (let i = 0; i < dropsCount; i++) {
-    const drop = document.createElement('div');
-    drop.className = 'drop';
-    drop.style.left = Math.random() * window.innerWidth + 'px';
-    drop.style.animationDuration = (Math.random() * 1 + 0.5) + 's';
-    drop.style.opacity = Math.random() * 0.3 + 0.1;
-    drop.style.height = Math.random() * 15 + 5 + 'px';
-    rain.appendChild(drop);
-  }
-</script>
-
+        const game = new BlackjackGame();
+    </script>
 </body>
 </html>
