@@ -2,7 +2,7 @@ document.querySelectorAll('.copy-btn').forEach(button => {
   button.addEventListener('click', async () => {
     const textToCopy = button.getAttribute('data-copy');
     await navigator.clipboard.writeText(textToCopy);
-    
+
     button.innerHTML = `
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M20 6L9 17l-5-5" />
