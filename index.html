@@ -96,11 +96,12 @@
       /* remove heavy blurred decorations on small screens for clarity and performance */
       .stage::before,.stage::after{display:none}
 
-      /* stack header vertically so avatar and name don't squeeze */
-      header{flex-direction:column;align-items:flex-start;gap:10px}
-      .logo{width:72px;height:72px;border-radius:12px}
-      h1{font-size:18px}
-      .pronoun{font-size:11px;padding:3px 8px}
+  /* keep header as a row on narrow phones so name sits next to PFP, but allow meta content to stack internally */
+  header{flex-direction:row;align-items:center;gap:12px}
+  .logo{width:64px;height:64px;border-radius:12px}
+  .meta{flex-direction:column;gap:4px}
+  h1{font-size:18px}
+  .pronoun{font-size:11px;padding:3px 8px}
 
       .bio-box{font-size:14px;padding:12px}
 
