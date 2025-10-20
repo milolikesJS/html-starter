@@ -36,7 +36,8 @@
     @keyframes float2{from{transform:translateY(0)}to{transform:translateY(-20px)}}
 
   header{display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:nowrap}
-  .logo{width:64px;height:64px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent1),var(--accent2));color:#fff;font-weight:800;font-size:22px;box-shadow:var(--glow)}
+  /* slightly larger desktop avatar for prominence */
+  .logo{width:80px;height:80px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent1),var(--accent2));color:#fff;font-weight:800;font-size:22px;box-shadow:var(--glow)}
   /* meta column sits to the right of the logo and stacks name/pronoun */
     .meta{display:flex;flex-direction:column;gap:6px;flex:1;min-width:0}
     /* ensure meta sits vertically centered next to logo on wider screens */
@@ -47,7 +48,8 @@
   h1{font-size:22px;font-weight:700;color:#e0baff;margin:0}
   .pronoun{font-size:12px; background:rgba(255,255,255,0.03); color:var(--accent2); padding:4px 8px; border-radius:8px; border:1px solid rgba(183,110,255,0.6); width:fit-content}
 
-    .bio-box{margin-top:12px;padding:14px 18px;border-radius:12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);color:#bfa6ff;}
+    /* bio as a boxed card that wraps text */
+    .bio-box{margin-top:12px;padding:14px 18px;border-radius:12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);color:#bfa6ff;max-width:100%;white-space:normal;line-height:1.45;word-break:break-word}
 
     .links{display:grid;gap:14px;margin-top:16px;}
     @media(min-width:640px){.links{grid-template-columns:repeat(2,1fr)}}
@@ -98,12 +100,14 @@
 
   /* keep header as a row on narrow phones so name sits next to PFP, but allow meta content to stack internally */
   header{flex-direction:row;align-items:center;gap:12px}
-  .logo{width:64px;height:64px;border-radius:12px}
+  /* larger avatar on mobile */
+  .logo{width:84px;height:84px;border-radius:16px}
   .meta{flex-direction:column;gap:4px}
   h1{font-size:18px}
   .pronoun{font-size:11px;padding:3px 8px}
 
-      .bio-box{font-size:14px;padding:12px}
+  /* make bio full-width under the header on mobile */
+  .bio-box{font-size:14px;padding:12px;margin-top:12px;width:100%;}
 
       /* make each link taller and easier to tap */
       .links{gap:12px}
@@ -129,9 +133,11 @@
       <div class="meta">
         <h1>Brim's Profile</h1>
         <div class="pronoun">he/him</div>
-        <div class="bio-box">hi im brim, im 16. i like to work on electronics, build and fix computers, and code.</div>
       </div>
     </header>
+
+    <!-- move bio below header so it spans the full width of the stage -->
+    <div class="bio-box">hi im brim, im 16. i like to work on electronics, build and fix computers, and code.</div>
 
     <main>
       <div class="links">
